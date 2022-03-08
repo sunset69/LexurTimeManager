@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">LexurTimeManager</string>
+    <string name="tv_task_name">Task Name</string>
+    <string name="tv_task_description">Task Description</string>
+    <string name="task">Task</string>
+    <string name="summary">Summary</string>
+    <string name="profile">profile</string>
+    <string name="image">image</string>
+    <string name="menu_add">Add Task</string>
+    <string name="menu_clear">Clear All Tasks</string>
 </resources>
