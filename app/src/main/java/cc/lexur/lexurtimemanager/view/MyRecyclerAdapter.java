@@ -1,5 +1,10 @@
 package cc.lexur.lexurtimemanager.view;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +37,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     }
 
     // 返回所有的数据
-    public void setAllWords(List<Task> allTasks){
+    public void setAllWords(List<Task> allTasks) {
         this.allTasks = allTasks;
     }
 
@@ -40,12 +46,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //RecyclerView中调用Databinding，绑定布局，获取binding实例
-        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.cell_card,parent,false);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.cell_card, parent, false);
         //把binding作为参数，返回一个自定义的MyViewHolder
         return new MyViewHolder(binding);
     }
 
     //当调用ViewHolder时响应
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //获取当前位置的一行数据
@@ -59,6 +66,17 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                 Log.d("LexurLog", "onClick: 点击了");
             }
         });
+        switch (position%3){
+            case 0:
+                holder.cardView.setBackgroundResource(R.color.done);
+                break;
+            case 1:
+                holder.cardView.setBackgroundResource(R.color.todo);
+                break;
+            case 2:
+                holder.cardView.setBackgroundResource(R.color.expire);
+                break;
+        }
 
     }
 
@@ -71,12 +89,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private CellCardBinding binding;
-        TextView tvTaskName,tvTaskDescription;
+        TextView tvTaskName, tvTaskDescription;
+        CardView cardView;
 
         public MyViewHolder(CellCardBinding binding) {
             super(binding.getRoot());
             tvTaskName = binding.tvTaskName;
             tvTaskDescription = binding.tvTaskDescription;
+            cardView = binding.cardView;
         }
     }
 }

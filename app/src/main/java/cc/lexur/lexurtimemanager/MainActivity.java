@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         mainBinding.setLifecycleOwner(this);
 
         init();
-
     }
 
     /**
@@ -48,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new ProfileFragment());
 
         MyFragmentPagerAdapter pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), getLifecycle(), fragments);
+        // 禁止ViewPager滑动切换
+        mainBinding.viewPager.setUserInputEnabled(false);
         mainBinding.viewPager.setAdapter(pagerAdapter);
         // 绑定tab点击事件
         mainBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
