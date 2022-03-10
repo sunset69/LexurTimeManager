@@ -1,6 +1,7 @@
 package cc.lexur.lexurtimemanager;
 
 import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -79,4 +80,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.task_menu,menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 }

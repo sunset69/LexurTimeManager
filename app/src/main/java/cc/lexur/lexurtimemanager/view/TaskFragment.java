@@ -36,19 +36,31 @@ public class TaskFragment extends Fragment {
     TaskViewModel taskViewModel;
     private MyRecyclerAdapter recyclerAdapter;
 
+    // 空构造函数
     public TaskFragment() {
+        setHasOptionsMenu(true);// 开启ToolBar菜单
     }
 
-
-    public static TaskFragment newInstance() {
-        TaskFragment fragment = new TaskFragment();
-        return fragment;
-    }
-
+    /**
+     * 渲染菜单
+     * @param menu
+     * @param inflater
+     */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.task_menu,menu);
     }
+
+//    public static TaskFragment newInstance() {
+//        TaskFragment fragment = new TaskFragment();
+//        return fragment;
+//    }
+
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
