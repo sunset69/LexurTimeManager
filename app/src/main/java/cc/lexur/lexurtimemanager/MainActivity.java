@@ -1,7 +1,6 @@
 package cc.lexur.lexurtimemanager;
 
 import android.os.Bundle;
-import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;

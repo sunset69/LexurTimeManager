@@ -3,15 +3,12 @@ package cc.lexur.lexurtimemanager.view;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,26 +44,26 @@ public class TaskFragment extends Fragment {
 
     /**
      * 渲染菜单
+     *
      * @param menu
      * @param inflater
      */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.task_menu,menu);
+        inflater.inflate(R.menu.task_menu, menu);
         MenuItem itemAdd = menu.findItem(R.id.menuItemAdd);
         MenuItem itemClear = menu.findItem(R.id.menuItemClear);
         itemAdd.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                startActivity(new Intent(getContext(),AddTaskActivity.class));
+                startActivity(new Intent(getContext(), AddTaskActivity.class));
                 return true;
             }
         });
         itemClear.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 new AlertDialog.Builder(getContext())
                         .setTitle("警告")
                         .setMessage("确认清空数据！")
@@ -76,7 +73,7 @@ public class TaskFragment extends Fragment {
                                 taskViewModel.clearTasks();
                             }
                         })
-                        .setPositiveButton("取消",null)
+                        .setPositiveButton("取消", null)
                         .show();
                 return true;
             }
@@ -108,36 +105,6 @@ public class TaskFragment extends Fragment {
                 recyclerAdapter.notifyDataSetChanged();
             }
         });
-
-        // 添加
-//        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Task task1 = new Task("学习", "学习编程");
-//                Task task2 = new Task("购物", "购买东西，AAAAAAVVVVBBBASFASFSAFASF");
-//                taskViewModel.insertTasks(task1, task2);
-//            }
-//        });
-
-        // 修改
-//        binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Task task = new Task("修改", "修改过后");
-//                task.setId(2);
-//                taskViewModel.updateTasks(task);
-//            }
-//        });
-
-        // 清空
-//        binding.btnClear.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                taskViewModel.clearTasks();
-//            }
-//        });
-
-
     }
 
 

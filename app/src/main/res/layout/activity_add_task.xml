@@ -16,7 +16,7 @@
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/menu_add"
+            android:text="@string/add"
             android:textColor="#212121"
             app:layout_constraintBottom_toBottomOf="@+id/btnCancel"
             app:layout_constraintEnd_toStartOf="@+id/btnCancel"
@@ -28,7 +28,7 @@
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@android:string/cancel"
+            android:text="@string/cancel"
             android:textColor="#212121"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +38,7 @@
             app:layout_constraintVertical_bias="0.9" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/etTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -60,11 +60,11 @@
             android:layout_marginBottom="17dp"
             android:text="@string/title"
             android:textSize="15sp"
-            app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
-            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName" />
+            app:layout_constraintBottom_toTopOf="@+id/etTitle"
+            app:layout_constraintStart_toStartOf="@+id/etTitle" />
 
         <EditText
-            android:id="@+id/editTextTextMultiLine"
+            android:id="@+id/etDescription"
             android:layout_width="0dp"
             android:layout_height="600px"
             android:ems="10"
@@ -96,9 +96,60 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="13dp"
-            android:text="TextView"
-            app:layout_constraintBottom_toTopOf="@+id/editTextTextMultiLine"
+            android:text="Description"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/etDescription"
             app:layout_constraintStart_toStartOf="@+id/guideline2" />
+
+        <EditText
+            android:id="@+id/editTextDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:ems="10"
+            android:inputType="date"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/etDescription"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textSize="15sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/editTextDate"
+            app:layout_constraintEnd_toStartOf="@+id/editTextDate"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/guideline2" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textSize="15sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/editTextTime"
+            app:layout_constraintEnd_toStartOf="@+id/editTextTime"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/guideline2" />
+
+        <EditText
+            android:id="@+id/editTextTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:inputType="time"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintTop_toBottomOf="@+id/editTextDate"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
