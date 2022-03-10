@@ -1,9 +1,14 @@
 package cc.lexur.lexurtimemanager.view;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,7 +63,8 @@ public class TaskFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        recyclerAdapter = new MyRecyclerAdapter();
+        recyclerAdapter = new MyRecyclerAdapter(taskViewModel);
+
         binding.recyclerView.setAdapter(recyclerAdapter);
 
         //为实现LiveData的数据设置观察者，以便当数据改变时通知UI更新数据
