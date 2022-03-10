@@ -1,17 +1,20 @@
 package cc.lexur.lexurtimemanager.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -50,6 +53,33 @@ public class TaskFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.task_menu,menu);
+        MenuItem itemAdd = menu.findItem(R.id.menuItemAdd);
+        MenuItem itemClear = menu.findItem(R.id.menuItemClear);
+        itemAdd.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Toast.makeText(getContext(), "添加", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        itemClear.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                new AlertDialog.Builder(getContext())
+                        .setTitle("警告")
+                        .setMessage("确认清空数据！")
+                        .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                taskViewModel.clearTasks();
+                            }
+                        })
+                        .setPositiveButton("取消",null)
+                        .show();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -105,6 +135,8 @@ public class TaskFragment extends Fragment {
                 taskViewModel.clearTasks();
             }
         });
+
+
     }
 
 

@@ -10,6 +10,6 @@
     <string name="menu_clear">Clear All Tasks</string>
     <string name="add_task">Add Task</string>
     <string name="clear_tasks">Clear Tasks</string>
-    <string name="show_descrption">Show Descrption</string>
+    <string name="show_description">Show Descrption</string>
 
 </resources>
