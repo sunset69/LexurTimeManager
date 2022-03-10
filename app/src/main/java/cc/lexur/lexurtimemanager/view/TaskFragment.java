@@ -52,16 +52,6 @@ public class TaskFragment extends Fragment {
         inflater.inflate(R.menu.task_menu,menu);
     }
 
-//    public static TaskFragment newInstance() {
-//        TaskFragment fragment = new TaskFragment();
-//        return fragment;
-//    }
-
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

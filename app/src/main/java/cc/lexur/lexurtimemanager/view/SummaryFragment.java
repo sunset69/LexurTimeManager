@@ -26,16 +26,6 @@ public class SummaryFragment extends Fragment {
     public SummaryFragment() {
     }
 
-    public static SummaryFragment newInstance() {
-        SummaryFragment fragment = new SummaryFragment();
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
