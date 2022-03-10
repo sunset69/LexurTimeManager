@@ -11,5 +11,8 @@
     <string name="add_task">Add Task</string>
     <string name="clear_tasks">Clear Tasks</string>
     <string name="show_description">Show Descrption</string>
+    <string name="cancel">cancel</string>
+    <string name="title">title</string>
+    <string name="title_input_hint">Please input title</string>
 
 </resources>

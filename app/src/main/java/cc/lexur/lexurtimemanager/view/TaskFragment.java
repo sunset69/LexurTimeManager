@@ -1,6 +1,7 @@
 package cc.lexur.lexurtimemanager.view;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -58,7 +59,7 @@ public class TaskFragment extends Fragment {
         itemAdd.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Toast.makeText(getContext(), "添加", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(),AddTaskActivity.class));
                 return true;
             }
         });
@@ -109,32 +110,32 @@ public class TaskFragment extends Fragment {
         });
 
         // 添加
-        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Task task1 = new Task("学习", "学习编程");
-                Task task2 = new Task("购物", "购买东西，AAAAAAVVVVBBBASFASFSAFASF");
-                taskViewModel.insertTasks(task1, task2);
-            }
-        });
+//        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Task task1 = new Task("学习", "学习编程");
+//                Task task2 = new Task("购物", "购买东西，AAAAAAVVVVBBBASFASFSAFASF");
+//                taskViewModel.insertTasks(task1, task2);
+//            }
+//        });
 
         // 修改
-        binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Task task = new Task("修改", "修改过后");
-                task.setId(2);
-                taskViewModel.updateTasks(task);
-            }
-        });
+//        binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Task task = new Task("修改", "修改过后");
+//                task.setId(2);
+//                taskViewModel.updateTasks(task);
+//            }
+//        });
 
         // 清空
-        binding.btnClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                taskViewModel.clearTasks();
-            }
-        });
+//        binding.btnClear.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                taskViewModel.clearTasks();
+//            }
+//        });
 
 
     }
