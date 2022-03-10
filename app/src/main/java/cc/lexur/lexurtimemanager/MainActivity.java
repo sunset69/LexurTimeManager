@@ -73,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                mainBinding.tabLayout.selectTab(mainBinding.tabLayout.getTabAt(position));
+                TabLayout.Tab tab = mainBinding.tabLayout.getTabAt(position);
+                mainBinding.tabLayout.selectTab(tab);
             }
         });
 
