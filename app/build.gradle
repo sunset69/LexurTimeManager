@@ -56,4 +56,8 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+
+    //Markdown支持
+    implementation 'com.zzhoujay.markdown:markdown:1.0.5'
+
 }
