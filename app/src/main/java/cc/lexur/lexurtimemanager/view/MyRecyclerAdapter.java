@@ -1,5 +1,6 @@
 package cc.lexur.lexurtimemanager.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,7 +61,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //RecyclerView中调用Databinding，绑定布局，获取binding实例
+        //RecyclerView中调用DataBinding，绑定布局，获取binding实例
         binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.cell_card, parent, false);
         //把binding作为参数，返回一个自定义的MyViewHolder
         return new MyViewHolder(binding);
@@ -76,7 +77,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //获取当前位置的一行数据
         Task task = allTasks.get(position);
-        holder.itemView.setTag(R.string.ITEM_TASK_TAG, task);
+        holder.cardView.setTag(R.string.ITEM_TASK_TAG, task);
         //设置数据
         holder.tvTaskName.setText(task.getName());
         holder.tvTaskDescription.setText(task.getDescription());
@@ -86,6 +87,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
             @Override
             public void onClick(View view) {
                 Toast.makeText(view.getContext(), "clicked position:" + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                Task task = (Task) view.getTag(R.string.ITEM_TASK_TAG);
+                Log.d("test", "onClick: "+task.toString());
             }
         });
 
