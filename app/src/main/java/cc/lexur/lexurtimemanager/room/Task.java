@@ -9,17 +9,19 @@ import java.util.Date;
 
 @Entity
 public class Task {
+
     @PrimaryKey(autoGenerate = true)
     int id;
 
     private String name;
     private String description;
 
+
     @ColumnInfo(name = "create_time")
     private Date createTime;
 
     @Ignore
-    public Task(){
+    public Task() {
 
     }
 
