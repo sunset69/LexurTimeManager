@@ -53,9 +53,10 @@
 
                 <TextView
                     android:id="@+id/tvTaskName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:singleLine="true"
                     android:text="@string/tv_task_name"
                     android:textSize="30sp"
                     app:layout_constraintEnd_toStartOf="@+id/guideline4"
@@ -65,11 +66,13 @@
 
                 <TextView
                     android:id="@+id/tvTaskDescription"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
+                    android:singleLine="true"
                     android:text="@string/tv_task_description"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/tvTaskName"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
                     app:layout_constraintTop_toBottomOf="@+id/tvTaskName" />
 
