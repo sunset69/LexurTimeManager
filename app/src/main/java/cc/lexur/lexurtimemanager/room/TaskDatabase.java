@@ -7,7 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {Task.class},version = 1,exportSchema = false)
+@Database(entities = {Task.class,Label.class},version = 1,exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class TaskDatabase extends RoomDatabase {
 
@@ -22,5 +22,7 @@ public abstract class TaskDatabase extends RoomDatabase {
     }
 
     public abstract TaskDao getTaskDao();
+
+    public abstract LabelDao getLabelDao();
 
 }

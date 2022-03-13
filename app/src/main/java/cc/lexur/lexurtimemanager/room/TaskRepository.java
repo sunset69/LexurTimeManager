@@ -10,12 +10,14 @@ import java.util.List;
 public class TaskRepository {
     private LiveData<List<Task>> allTasksLive;
     private TaskDao taskDao;
+    private LabelDao labelDao;
 
     public TaskRepository(Context context) {
         //获取数据库实例（唯一）
         TaskDatabase taskDatabase = TaskDatabase.getInstance(context);
         //获取数据库操作dao的实例
         taskDao = taskDatabase.getTaskDao();
+        labelDao = taskDatabase.getLabelDao();
         //LiveData格式的数据在获取时,系统自动会调用Async来处理
         allTasksLive = taskDao.getAllTasks();
     }

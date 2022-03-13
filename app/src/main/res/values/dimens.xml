@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="setting_height">50dp</dimen>
+    <dimen name="setting_radios">15sp</dimen>
+    <dimen name="setting_text">25sp</dimen>
+
+    <style name="setting_card" >
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+    </style>
+</resources>
