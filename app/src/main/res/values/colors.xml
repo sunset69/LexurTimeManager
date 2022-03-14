@@ -15,6 +15,9 @@
     <color name="selected">#88FB7B</color>
     <color name="unselected">#515151</color>
 
+    <color name="red">#E91E63</color>
+    <color name="green">#4CAF50</color>
+
     <!--主题色-->
     <color name="blue_700">#006FC8</color>
     <color name="blue_500">#008EFF</color>

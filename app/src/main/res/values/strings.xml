@@ -5,7 +5,6 @@
     <string name="task">Task</string>
     <string name="summary">Summary</string>
     <string name="profile">profile</string>
-    <string name="image">image</string>
     <string name="menu_add">Add Task</string>
     <string name="menu_clear">Clear All Tasks</string>
     <string name="add_task">Add Task</string>
@@ -15,9 +14,14 @@
     <string name="title_input_hint">Please input title</string>
     <string name="add">add</string>
     <string name="cancel">cancel</string>
+    <string name="ok">Ok</string>
 
 
     <!-- 提示语 -->
     <string name="title_error">Please input title</string>
+    <string name="set_time">set time</string>
+    <string name="none">none</string>
+    <string name="arrow_right">arrow right</string>
+    <string name="image">image</string>
 
 </resources>

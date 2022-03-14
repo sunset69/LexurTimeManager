@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Html;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateViewModelFactory;
@@ -34,6 +37,7 @@ import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.FragmentSummaryBinding;
 import cc.lexur.lexurtimemanager.utils.Text2Markdown;
+import cc.lexur.lexurtimemanager.utils.TimePicker;
 
 
 /**
@@ -58,6 +62,17 @@ public class SummaryFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog dialog = builder.create();
+                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.time_picker, null, false);
+                dialog.setView(dialogView);
+                dialog.show();
+            }
+        });
 
 
     }
