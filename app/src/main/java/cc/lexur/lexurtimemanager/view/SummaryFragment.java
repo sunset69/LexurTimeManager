@@ -64,13 +64,10 @@ public class SummaryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.textView.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                AlertDialog dialog = builder.create();
-                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.time_picker, null, false);
-                dialog.setView(dialogView);
-                dialog.show();
+                TimePicker.showDatePickerDialog(getContext());
             }
         });
 

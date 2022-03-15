@@ -103,54 +103,60 @@
             app:layout_constraintBottom_toTopOf="@+id/etDescription"
             app:layout_constraintStart_toStartOf="@+id/guideline2" />
 
-        <EditText
-            android:id="@+id/editTextDate"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/selectDate"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
             android:ems="10"
+            android:hint="@string/select_date"
             android:inputType="date"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            android:textSize="@dimen/middle_text"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDate"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/etDescription"
+            app:layout_constraintStart_toEndOf="@+id/tvDate"
+            app:layout_constraintTop_toTopOf="@+id/tvDate"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/standard_margin"
             android:text="Date"
-            android:textSize="15sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editTextDate"
-            app:layout_constraintEnd_toStartOf="@+id/editTextDate"
+            android:textSize="@dimen/middle_text"
+            app:layout_constraintEnd_toStartOf="@+id/selectDate"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline2" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Time"
-            android:textSize="15sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editTextTime"
-            app:layout_constraintEnd_toStartOf="@+id/editTextTime"
+            android:textSize="@dimen/middle_text"
+            app:layout_constraintBottom_toBottomOf="@+id/selectTime"
+            app:layout_constraintEnd_toStartOf="@+id/selectTime"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline2" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/selectTime" />
 
-        <EditText
-            android:id="@+id/editTextTime"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/selectTime"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/standard_margin"
             android:ems="10"
+            android:hint="@string/select_time"
             android:inputType="time"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            android:textSize="@dimen/middle_text"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView5"
-            app:layout_constraintTop_toBottomOf="@+id/editTextDate"
+            app:layout_constraintStart_toEndOf="@+id/tvTime"
+            app:layout_constraintTop_toBottomOf="@+id/selectDate"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
