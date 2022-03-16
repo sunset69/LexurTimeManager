@@ -2,6 +2,7 @@ package cc.lexur.lexurtimemanager.view;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class AddTaskActivity extends AppCompatActivity {
     TaskViewModel taskViewModel;
     Calendar selectedCalendar;
     private Calendar currentCalendar;
+    private List<Chip> labelChips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class AddTaskActivity extends AppCompatActivity {
         binding.cgLabel.setLayoutMode(StaggeredGridLayoutManager.HORIZONTAL);
 
         // 获取分类
-        List<Chip> labelChips = new ArrayList<>();
+        labelChips = new ArrayList<>();
         Chip chipStudy = new Chip(this);
         chipStudy.setText("学习");
         Chip chipWork = new Chip(this);
@@ -87,10 +89,12 @@ public class AddTaskActivity extends AppCompatActivity {
         chipLife.setText("生活");
         Chip chipOther = new Chip(this);
         chipOther.setText("其他");
+        chipOther.setCheckable(true);
+        chipOther.setChecked(true);
+        labelChips.add(chipOther);
         labelChips.add(chipStudy);
         labelChips.add(chipWork);
         labelChips.add(chipLife);
-        labelChips.add(chipOther);
 
         for (Chip chip : labelChips) {
             chip.setCheckable(true);//设置为可选择
@@ -99,9 +103,11 @@ public class AddTaskActivity extends AppCompatActivity {
         binding.cgLabel.setSingleSelection(true);
         // 设置点击事件
         binding.cgLabel.setOnCheckedChangeListener((group, checkedId) -> {
-            Chip chipSelected = (Chip) group.getChildAt(checkedId);
-            Toast.makeText(getApplicationContext(), "点击了：" + checkedId, Toast.LENGTH_SHORT).show();
-            Log.d("test", "init: 点击了："+checkedId);
+            // 使用findViewById来获取控件
+            Chip chipTest = group.findViewById(checkedId);
+            if (chipTest != null){
+                Log.d("test", "init: 选中了："+chipTest.getText());
+            }
         });
 
         /**
@@ -122,8 +128,14 @@ public class AddTaskActivity extends AppCompatActivity {
 //                task.setCreateTime(new Date());
             taskViewModel.insertTasks(task);
 
-            Chip selectedChip = (Chip) binding.cgLabel.getChildAt(binding.cgLabel.getCheckedChipId());
-            task.setLabelId(binding.cgLabel.getCheckedChipId());
+            int selectId = binding.cgLabel.getCheckedChipId();
+            // 默认未选择为-1
+            if (selectId == -1){
+                task.setLabelId(0);
+            }else {
+                Chip selectedChip = (Chip) binding.cgLabel.getChildAt(binding.cgLabel.getCheckedChipId());
+                task.setLabelId(selectId);
+            }
 
 
 
