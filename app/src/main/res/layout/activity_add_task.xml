@@ -40,18 +40,19 @@
 
         <EditText
             android:id="@+id/etTitle"
-            android:layout_width="329dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/standard_margin"
             android:background="@drawable/rounded_rectangle"
             android:ems="10"
             android:hint="@string/title_input_hint"
+            android:importantForAutofill="no"
             android:inputType="textPersonName"
             android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
             app:layout_constraintStart_toStartOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
-            tools:ignore="SpeakableTextPresentCheck"
-            android:importantForAutofill="no" />
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:id="@+id/textView2"
@@ -65,17 +66,18 @@
 
         <EditText
             android:id="@+id/etDescription"
-            android:layout_width="329dp"
+            android:layout_width="0dp"
             android:layout_height="300dp"
             android:layout_marginTop="13dp"
             android:background="@drawable/rounded_rectangle"
             android:ems="10"
             android:gravity="start|top"
+            android:importantForAutofill="no"
             android:inputType="textMultiLine"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/textView3"
-            tools:ignore="SpeakableTextPresentCheck"
-            android:importantForAutofill="no" />
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
@@ -116,7 +118,7 @@
 
         <TextView
             android:id="@+id/tvDate"
-            android:layout_width="60dp"
+            android:layout_width="65dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/standard_margin"
             android:text="@string/date"
@@ -126,13 +128,23 @@
 
         <TextView
             android:id="@+id/tvTime"
-            android:layout_width="60dp"
+            android:layout_width="65dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/standard_margin"
             android:text="@string/time"
             android:textSize="@dimen/middle_text"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+        <TextView
+            android:id="@+id/tvLabel"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/standard_margin"
+            android:text="@string/label"
+            android:textSize="@dimen/middle_text"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/tvTime" />
 
         <TextView
             android:id="@+id/selectTime"
@@ -146,6 +158,16 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/tvTime"
             app:layout_constraintStart_toEndOf="@+id/tvTime"
             tools:ignore="SpeakableTextPresentCheck,TextContrastCheck" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cgLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintStart_toEndOf="@+id/tvLabel"
+            app:layout_constraintTop_toTopOf="@+id/tvLabel"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
