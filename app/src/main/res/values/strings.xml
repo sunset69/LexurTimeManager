@@ -30,5 +30,7 @@
     <string name="description">Description</string>
     <string name="label">Label</string>
     <string name="label_input_hint">请输入标签并使用逗号隔开</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

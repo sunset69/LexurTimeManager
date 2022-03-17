@@ -67,45 +67,8 @@ public class SummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.textView.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                TimePicker.showDatePickerDialog(getContext());
-            }
-        });
 
-        LiveData<List<Label>> labelsLive = taskViewModel.getAllLabelsLive();
-        labelsLive.observe(this, new Observer<List<Label>>() {
-            @Override
-            public void onChanged(List<Label> labels) {
-                Log.d("test", "onChanged: 数据变化");
-                for (int i = 0; i < labels.size(); i++) {
-                    Log.d("test", "onChanged: " + labels.get(i).getName());
-                }
-            }
-        });
 
-        // 测试label数据库
-        binding.button.setOnClickListener(view1 -> {
-            Label label = new Label();
-            label.setName("生活");
-            taskViewModel.insertLabels(label);
-        });
-        binding.button2.setOnClickListener(view1 -> {
-            Label label = new Label();
-            int id = labelsLive.getValue().get(0).getId();
-            label.setId(id);
-            label.setName("修改");
-            taskViewModel.updateLabels(label);
-        });
-        binding.button3.setOnClickListener(view1 -> {
-            Label label = new Label();
-            int id = labelsLive.getValue().get(0).getId();
-            label.setId(id);
-            taskViewModel.deleteLabels(label);
-
-        });
 
     }
 
