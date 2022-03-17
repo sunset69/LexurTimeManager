@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LexurTimeManager">
         <activity
+            android:name=".view.LabelManagerActivity"
+            android:exported="true" />
+        <activity
             android:name=".view.AddTaskActivity"
             android:exported="true" />
         <activity
