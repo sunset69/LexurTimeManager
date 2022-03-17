@@ -23,6 +23,7 @@ public class TaskRepository {
     }
 
     // 为实现AsyncTask静态内部类提供访问的接口
+    // Task相关
     public void insertTasks(Task... tasks) {
         new InsertAsyncTask(taskDao).execute(tasks);
     }
@@ -37,6 +38,17 @@ public class TaskRepository {
 
     public void clearTasks() {
         new ClearAsyncTask(taskDao).execute();
+    }
+
+    // Label相关
+    public void insertLabels(Label... labels){
+        new InsertAsyncLabel(labelDao).execute(labels);
+    }
+    public void updateLabels(Label... labels){
+        new UpdateAsyncLabel(labelDao).execute(labels);
+    }
+    public void deleteLabels(Label... labels){
+        new DeleteAsyncLabel(labelDao).execute(labels);
     }
 
     // 查询方法默认异步线程
@@ -101,6 +113,51 @@ public class TaskRepository {
         @Override
         protected Void doInBackground(Void... voids) {
             dao.deleteAllTasks();
+            return null;
+        }
+    }
+
+    private static class InsertAsyncLabel extends AsyncTask<Label,Void,Void>{
+        private LabelDao dao;
+        public InsertAsyncLabel(LabelDao dao){
+            this.dao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Label... labels) {
+            dao.insertLabels(labels);
+            return null;
+        }
+    }
+
+
+
+    static class UpdateAsyncLabel extends AsyncTask<Label, Void, Void> {
+
+        private LabelDao dao;
+
+        public UpdateAsyncLabel(LabelDao dao) {
+            this.dao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Label... labels) {
+            dao.updateLabels(labels);
+            return null;
+        }
+    }
+
+    static class DeleteAsyncLabel extends AsyncTask<Label, Void, Void> {
+
+        private LabelDao dao;
+
+        public DeleteAsyncLabel(LabelDao dao) {
+            this.dao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Label... labels) {
+            dao.deleteLabels(labels);
             return null;
         }
     }
