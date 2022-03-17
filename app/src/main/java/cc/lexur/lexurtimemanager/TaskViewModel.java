@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import cc.lexur.lexurtimemanager.room.Label;
 import cc.lexur.lexurtimemanager.room.Task;
 import cc.lexur.lexurtimemanager.room.TaskRepository;
 
@@ -40,6 +41,23 @@ public class TaskViewModel extends AndroidViewModel {
     public void clearTasks(){
         taskRepository.clearTasks();
     }
+
+    public LiveData<List<Label>> getAllLabelsLive(){
+        return taskRepository.getAllLabelsLive();
+    }
+
+    public void insertLabels(Label... labels){
+        taskRepository.insertLabels(labels);
+    }
+
+    public void updateLabels(Label... labels){
+        taskRepository.updateLabels(labels);
+    }
+
+    public void deleteLabels(Label... labels){
+        taskRepository.deleteLabels(labels);
+    }
+
 
 
 }

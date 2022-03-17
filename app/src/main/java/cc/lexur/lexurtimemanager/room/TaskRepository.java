@@ -9,6 +9,7 @@ import java.util.List;
 
 public class TaskRepository {
     private LiveData<List<Task>> allTasksLive;
+    private LiveData<List<Label>> allLabelsLive;
     private TaskDao taskDao;
     private LabelDao labelDao;
 
@@ -20,6 +21,7 @@ public class TaskRepository {
         labelDao = taskDatabase.getLabelDao();
         //LiveData格式的数据在获取时,系统自动会调用Async来处理
         allTasksLive = taskDao.getAllTasks();
+        allLabelsLive = labelDao.getAllLabels();
     }
 
     // 为实现AsyncTask静态内部类提供访问的接口
@@ -40,7 +42,16 @@ public class TaskRepository {
         new ClearAsyncTask(taskDao).execute();
     }
 
+    // 查询方法默认异步线程
+    public LiveData<List<Task>> getAllTasksLive() {
+        return allTasksLive;
+    }
+
     // Label相关
+    public LiveData<List<Label>> getAllLabelsLive(){
+        return allLabelsLive;
+    }
+
     public void insertLabels(Label... labels){
         new InsertAsyncLabel(labelDao).execute(labels);
     }
@@ -49,11 +60,6 @@ public class TaskRepository {
     }
     public void deleteLabels(Label... labels){
         new DeleteAsyncLabel(labelDao).execute(labels);
-    }
-
-    // 查询方法默认异步线程
-    public LiveData<List<Task>> getAllTasksLive() {
-        return allTasksLive;
     }
 
     //把对数据库的操作封装到实现AsyncTask的类中，因为Room对数据库的操作是耗时操作，不允许在主线程中执行。
@@ -129,8 +135,6 @@ public class TaskRepository {
             return null;
         }
     }
-
-
 
     static class UpdateAsyncLabel extends AsyncTask<Label, Void, Void> {
 

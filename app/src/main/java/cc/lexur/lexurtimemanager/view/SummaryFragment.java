@@ -23,6 +23,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -32,10 +34,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.FragmentSummaryBinding;
+import cc.lexur.lexurtimemanager.room.Label;
 import cc.lexur.lexurtimemanager.utils.Text2Markdown;
 import cc.lexur.lexurtimemanager.utils.TimePicker;
 
@@ -71,6 +75,37 @@ public class SummaryFragment extends Fragment {
             }
         });
 
+        LiveData<List<Label>> labelsLive = taskViewModel.getAllLabelsLive();
+        labelsLive.observe(this, new Observer<List<Label>>() {
+            @Override
+            public void onChanged(List<Label> labels) {
+                Log.d("test", "onChanged: 数据变化");
+                for (int i = 0; i < labels.size(); i++) {
+                    Log.d("test", "onChanged: " + labels.get(i).getName());
+                }
+            }
+        });
+
+        // 测试label数据库
+        binding.button.setOnClickListener(view1 -> {
+            Label label = new Label();
+            label.setName("生活");
+            taskViewModel.insertLabels(label);
+        });
+        binding.button2.setOnClickListener(view1 -> {
+            Label label = new Label();
+            int id = labelsLive.getValue().get(0).getId();
+            label.setId(id);
+            label.setName("修改");
+            taskViewModel.updateLabels(label);
+        });
+        binding.button3.setOnClickListener(view1 -> {
+            Label label = new Label();
+            int id = labelsLive.getValue().get(0).getId();
+            label.setId(id);
+            taskViewModel.deleteLabels(label);
+
+        });
 
     }
 
