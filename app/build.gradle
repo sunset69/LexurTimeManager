@@ -61,5 +61,8 @@ dependencies {
     //Markdown支持
     implementation 'com.zzhoujay.markdown:markdown:1.0.5'
 
+    // 颜色选择器
+    implementation 'com.github.duanhong169:colorpicker:1.1.6'
+
 
 }

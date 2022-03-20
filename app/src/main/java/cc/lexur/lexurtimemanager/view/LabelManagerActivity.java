@@ -8,22 +8,39 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
 
+import java.util.Date;
 import java.util.List;
 
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.ActivityLabelManagerBinding;
 import cc.lexur.lexurtimemanager.room.Label;
+import top.defaults.colorpicker.ColorPickerPopup;
 
 public class LabelManagerActivity extends AppCompatActivity {
 
     ActivityLabelManagerBinding binding;
     TaskViewModel taskViewModel;
+    private AlertDialog dialog;
+    private AlertDialog.Builder builder;
+    private View viewAddLabel;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -50,7 +67,57 @@ public class LabelManagerActivity extends AppCompatActivity {
             }
         });
 
+
         binding.btnAdd.setOnClickListener(view -> {
+            viewAddLabel = getLayoutInflater().inflate(R.layout.dialog_add_label,null);
+            Button btnAdd = viewAddLabel.findViewById(R.id.btnAdd);
+            Button btnColor = viewAddLabel.findViewById(R.id.btnColor);
+            builder = new AlertDialog.Builder(this);
+            builder.setTitle("添加标签")
+                    .setView(viewAddLabel);
+            btnColor.setOnClickListener(v -> {
+
+                new ColorPickerPopup.Builder(getApplicationContext())
+                        .initialColor(Color.RED) // Set initial color
+                        .enableBrightness(true) // Enable brightness slider or not
+                        .enableAlpha(true) // Enable alpha slider or not
+                        .okTitle("Choose")
+                        .cancelTitle("Cancel")
+                        .showIndicator(true)
+                        .showValue(true)
+                        .build()
+                        .show(v, new ColorPickerPopup.ColorPickerObserver() {
+                            @RequiresApi(api = Build.VERSION_CODES.O)
+                            @Override
+                            public void onColorPicked(int color) {
+                                v.setBackgroundColor(color);
+                                Color labelColor = Color.valueOf(color);
+                                v.setTag(labelColor);
+                                ((Button)v).setText("#"+Integer.toHexString(color));
+                            }
+                        });
+
+            });
+
+            btnAdd.setOnClickListener(view1 -> {
+                Log.d("test", "init: hello");
+                EditText etName = viewAddLabel.findViewById(R.id.etLabelName);
+                String name = etName.getText().toString();
+                Label label = new Label();
+                Color color = (Color) btnColor.getTag();
+                label.setName(name);
+                label.setColor(color);
+                label.setCreateTime(new Date().toString());
+
+                if (name == null){
+                    Toast.makeText(getApplicationContext(), "请输入标签名称！", Toast.LENGTH_SHORT).show();
+                }else {
+                    Log.d("test", "init: label:"+label.toString());
+                    taskViewModel.insertLabels(label);
+                }
+
+            });
+            builder.show();
         });
     }
 }

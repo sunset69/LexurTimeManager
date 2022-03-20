@@ -29,7 +29,8 @@ public class Converters {
     @TypeConverter
     public static Long colorToArgb(Color color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return Long.valueOf(color == null ? Color.GRAY : color.toArgb());
+            int defaultColor = Color.valueOf(163, 163, 163).toArgb();
+            return Long.valueOf(color == null ? defaultColor : color.toArgb());
         }
         return null;
     }
