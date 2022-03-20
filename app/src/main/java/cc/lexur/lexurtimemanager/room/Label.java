@@ -21,7 +21,7 @@ public class Label {
     @ColumnInfo(name = "create_time")
     private String createTime;
 
-    private Color color;
+    private int color;
 
     public Label() {
     }
@@ -60,11 +60,11 @@ public class Label {
         this.createTime = createTime;
     }
 
-    public Color getColor() {
+    public int getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(int color) {
         this.color = color;
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.Date;
 import java.util.List;
@@ -42,7 +44,6 @@ public class LabelManagerActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
     private View viewAddLabel;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,19 +54,20 @@ public class LabelManagerActivity extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void init(){
         LiveData<List<Label>> allLabelsLive = taskViewModel.getAllLabelsLive();
         allLabelsLive.observe(this, labels -> {
             binding.tvNumber.setText(String.valueOf(labels.size()));
+            binding.cgLabelManager.removeAllViews();
             for (int i = 0; i < labels.size(); i++) {
                 Label label = labels.get(i);
                 Chip chip = new Chip(this);
                 chip.setText(label.getName());
-                chip.setBackgroundColor(label.getColor().toArgb());
+                chip.setBackgroundColor(label.getColor());
                 binding.cgLabelManager.addView(chip);
             }
         });
+
 
 
         binding.btnAdd.setOnClickListener(view -> {
@@ -79,8 +81,8 @@ public class LabelManagerActivity extends AppCompatActivity {
 
                 new ColorPickerPopup.Builder(getApplicationContext())
                         .initialColor(Color.RED) // Set initial color
-                        .enableBrightness(true) // Enable brightness slider or not
-                        .enableAlpha(true) // Enable alpha slider or not
+//                        .enableBrightness(true) // Enable brightness slider or not
+//                        .enableAlpha(true) // Enable alpha slider or not
                         .okTitle("Choose")
                         .cancelTitle("Cancel")
                         .showIndicator(true)
@@ -91,8 +93,9 @@ public class LabelManagerActivity extends AppCompatActivity {
                             @Override
                             public void onColorPicked(int color) {
                                 v.setBackgroundColor(color);
-                                Color labelColor = Color.valueOf(color);
-                                v.setTag(labelColor);
+//                                Color labelColor = Color.valueOf(color);
+//                                v.setTag(labelColor);
+                                v.setTag(new Integer(color));
                                 ((Button)v).setText("#"+Integer.toHexString(color));
                             }
                         });
@@ -104,9 +107,11 @@ public class LabelManagerActivity extends AppCompatActivity {
                 EditText etName = viewAddLabel.findViewById(R.id.etLabelName);
                 String name = etName.getText().toString();
                 Label label = new Label();
-                Color color = (Color) btnColor.getTag();
+                Integer color = (Integer) btnColor.getTag();
                 label.setName(name);
-                label.setColor(color);
+                if (color != null){
+                    label.setColor(color);
+                }
                 label.setCreateTime(new Date().toString());
 
                 if (name == null){
