@@ -2,10 +2,16 @@ package cc.lexur.lexurtimemanager.room;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import cc.lexur.lexurtimemanager.MainActivity;
 
 public class TaskRepository {
     private LiveData<List<Task>> allTasksLive;
@@ -48,17 +54,30 @@ public class TaskRepository {
     }
 
     // Label相关
-    public LiveData<List<Label>> getAllLabelsLive(){
+    public LiveData<List<Label>> getAllLabelsLive() {
         return allLabelsLive;
     }
 
-    public void insertLabels(Label... labels){
+    public List<Label> getLabelByName(String name) {
+        try {
+            List<Label> labels = new GetLabelByNameAsyncTask(labelDao).execute(name).get();
+            return labels;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("LexurLog", "getLabelByName: 获取Label发生错误");
+            return new ArrayList<Label>();
+        }
+    }
+
+    public void insertLabels(Label... labels) {
         new InsertAsyncLabel(labelDao).execute(labels);
     }
-    public void updateLabels(Label... labels){
+
+    public void updateLabels(Label... labels) {
         new UpdateAsyncLabel(labelDao).execute(labels);
     }
-    public void deleteLabels(Label... labels){
+
+    public void deleteLabels(Label... labels) {
         new DeleteAsyncLabel(labelDao).execute(labels);
     }
 
@@ -123,9 +142,10 @@ public class TaskRepository {
         }
     }
 
-    private static class InsertAsyncLabel extends AsyncTask<Label,Void,Void>{
+    private static class InsertAsyncLabel extends AsyncTask<Label, Void, Void> {
         private LabelDao dao;
-        public InsertAsyncLabel(LabelDao dao){
+
+        public InsertAsyncLabel(LabelDao dao) {
             this.dao = dao;
         }
 
@@ -163,6 +183,20 @@ public class TaskRepository {
         protected Void doInBackground(Label... labels) {
             dao.deleteLabels(labels);
             return null;
+        }
+    }
+
+    static class GetLabelByNameAsyncTask extends AsyncTask<String, Void, List<Label>> {
+        private LabelDao dao;
+
+        public GetLabelByNameAsyncTask(LabelDao dao) {
+            this.dao = dao;
+        }
+
+        @Override
+        protected List<Label> doInBackground(String... strings) {
+            List<Label> labels = dao.getLabelByName(strings[0]);
+            return labels;
         }
     }
 }

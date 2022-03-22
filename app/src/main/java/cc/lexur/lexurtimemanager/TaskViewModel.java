@@ -46,6 +46,14 @@ public class TaskViewModel extends AndroidViewModel {
         return taskRepository.getAllLabelsLive();
     }
 
+    public boolean isLabelExisted(String name){
+        List<Label> labelByName = taskRepository.getLabelByName(name);
+        if (labelByName.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
     public void insertLabels(Label... labels){
         taskRepository.insertLabels(labels);
     }
