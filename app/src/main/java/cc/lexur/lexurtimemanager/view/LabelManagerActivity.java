@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -40,9 +41,7 @@ public class LabelManagerActivity extends AppCompatActivity {
 
     ActivityLabelManagerBinding binding;
     TaskViewModel taskViewModel;
-    private AlertDialog dialog;
-    private AlertDialog.Builder builder;
-    private View viewAddLabel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,25 +70,32 @@ public class LabelManagerActivity extends AppCompatActivity {
 
 
         binding.btnAdd.setOnClickListener(view -> {
-            viewAddLabel = getLayoutInflater().inflate(R.layout.dialog_add_label,null);
-            Button btnAdd = viewAddLabel.findViewById(R.id.btnAdd);
-            Button btnColor = viewAddLabel.findViewById(R.id.btnColor);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_label,null);
+            Button btnAdd = dialogView.findViewById(R.id.btnAdd);
+            Button btnColor = dialogView.findViewById(R.id.btnColor);
+            Button btnCancel = dialogView.findViewById(R.id.btnCancel);
             builder = new AlertDialog.Builder(this);
             builder.setTitle("添加标签")
-                    .setView(viewAddLabel);
+                    .setView(dialogView);
+
+            // 选择颜色
             btnColor.setOnClickListener(v -> {
 
-                new ColorPickerPopup.Builder(getApplicationContext())
+                // 选择颜色对话框
+                ColorPickerPopup colorPickerPopup = new ColorPickerPopup.Builder(LabelManagerActivity.this)
                         .initialColor(Color.RED) // Set initial color
 //                        .enableBrightness(true) // Enable brightness slider or not
 //                        .enableAlpha(true) // Enable alpha slider or not
-                        .okTitle("Choose")
-                        .cancelTitle("Cancel")
-                        .showIndicator(true)
-                        .showValue(true)
-                        .build()
-                        .show(v, new ColorPickerPopup.ColorPickerObserver() {
-                            @RequiresApi(api = Build.VERSION_CODES.O)
+                        .okTitle("选择")
+                        .cancelTitle("取消")
+//                        .showIndicator(true)
+//                        .showValue(true)
+                        .build();
+                        colorPickerPopup.show(v, new ColorPickerPopup.ColorPickerObserver() {
                             @Override
                             public void onColorPicked(int color) {
                                 v.setBackgroundColor(color);
@@ -102,9 +108,10 @@ public class LabelManagerActivity extends AppCompatActivity {
 
             });
 
+            // 添加
             btnAdd.setOnClickListener(view1 -> {
                 Log.d("test", "init: hello");
-                EditText etName = viewAddLabel.findViewById(R.id.etLabelName);
+                EditText etName = dialogView.findViewById(R.id.etLabelName);
                 String name = etName.getText().toString();
                 Label label = new Label();
                 Integer color = (Integer) btnColor.getTag();
@@ -120,9 +127,17 @@ public class LabelManagerActivity extends AppCompatActivity {
                     Log.d("test", "init: label:"+label.toString());
                     taskViewModel.insertLabels(label);
                 }
+                dialog.dismiss();
 
             });
-            builder.show();
+
+            // 取消
+            btnCancel.setOnClickListener(v -> {
+                dialog.dismiss();
+            });
+
+            dialog.getWindow().setContentView(dialogView);// 设置自定义View
+            dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);// 打开输入法
         });
     }
 }

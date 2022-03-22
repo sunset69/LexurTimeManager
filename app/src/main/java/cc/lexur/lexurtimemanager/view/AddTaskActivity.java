@@ -22,6 +22,7 @@ import java.util.List;
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.ActivityAddTaskBinding;
+import cc.lexur.lexurtimemanager.room.Label;
 import cc.lexur.lexurtimemanager.room.Task;
 import cc.lexur.lexurtimemanager.utils.DateFormat;
 
@@ -80,27 +81,19 @@ public class AddTaskActivity extends AppCompatActivity {
         binding.cgLabel.setLayoutMode(StaggeredGridLayoutManager.HORIZONTAL);
 
         // 获取分类
-        labelChips = new ArrayList<>();
-        Chip chipStudy = new Chip(this);
-        chipStudy.setText("学习");
-        Chip chipWork = new Chip(this);
-        chipWork.setText("工作");
-        Chip chipLife = new Chip(this);
-        chipLife.setText("生活");
-        Chip chipOther = new Chip(this);
-        chipOther.setText("其他");
-        chipOther.setCheckable(true);
-        chipOther.setChecked(true);
-        labelChips.add(chipOther);
-        labelChips.add(chipStudy);
-        labelChips.add(chipWork);
-        labelChips.add(chipLife);
+        taskViewModel.getAllLabelsLive().observe(this, labels -> {
+            binding.cgLabel.removeAllViews();
+            for (int i = 0; i < labels.size(); i++) {
+                Label label = labels.get(i);
+                Chip chip = new Chip(this);
+                chip.setCheckable(true);
+//                chip.setCloseIconVisible(true);
+                chip.setText(label.getName());
+                chip.setBackgroundColor(label.getColor());
+                binding.cgLabel.addView(chip);
+            }
+        });
 
-        for (Chip chip : labelChips) {
-            chip.setCheckable(true);//设置为可选择
-            binding.cgLabel.addView(chip);
-        }
-        binding.cgLabel.setSingleSelection(true);
         // 设置点击事件
         binding.cgLabel.setOnCheckedChangeListener((group, checkedId) -> {
             // 使用findViewById来获取控件
