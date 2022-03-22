@@ -48,13 +48,13 @@ public class LabelManagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_label_manager);
-        taskViewModel = new ViewModelProvider(this,new SavedStateViewModelFactory(getApplication(),this)).get(TaskViewModel.class);
+        taskViewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(getApplication(), this)).get(TaskViewModel.class);
         binding.setLifecycleOwner(this);
         init();
 
     }
 
-    private void init(){
+    private void init() {
         LiveData<List<Label>> allLabelsLive = taskViewModel.getAllLabelsLive();
         allLabelsLive.observe(this, labels -> {
             binding.tvNumber.setText(String.valueOf(labels.size()));
@@ -62,6 +62,38 @@ public class LabelManagerActivity extends AppCompatActivity {
             for (int i = 0; i < labels.size(); i++) {
                 Label label = labels.get(i);
                 Chip chip = new Chip(this);
+//                chip.setCheckable(true);
+                chip.setCloseIconVisible(true);
+                chip.setOnCloseIconClickListener(view -> {
+                    new AlertDialog.Builder(this)
+                            .setTitle("删除标签")
+                            .setMessage("是否删除"+label.getName()+"!")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    taskViewModel.deleteLabels(label);
+                                    Toast.makeText(getApplicationContext(), "已删除" + label.getName(), Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("取消",null)
+                            .show();
+                });
+                chip.setLongClickable(true);
+                chip.setOnLongClickListener(v -> {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    View viewDialog = LayoutInflater.from(this).inflate(R.layout.dialog_add_label, null);
+                    ((EditText) viewDialog.findViewById(R.id.etLabelName)).setText(label.getName());
+                    ((Button) viewDialog.findViewById(R.id.btnColor)).setBackgroundColor(label.getColor());
+
+                    dialog.getWindow().setContentView(viewDialog);
+                    dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+
+                    return false;
+                });
                 chip.setText(label.getName());
                 chip.setChipBackgroundColor(ChipUtils.setChipColor(label.getColor()));
                 binding.cgLabelManager.addView(chip);
@@ -69,13 +101,12 @@ public class LabelManagerActivity extends AppCompatActivity {
         });
 
 
-
         binding.btnAdd.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             AlertDialog dialog = builder.create();
             dialog.show();
 
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_label,null);
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_label, null);
             Button btnAdd = dialogView.findViewById(R.id.btnAdd);
             Button btnColor = dialogView.findViewById(R.id.btnColor);
             Button btnCancel = dialogView.findViewById(R.id.btnCancel);
@@ -89,62 +120,54 @@ public class LabelManagerActivity extends AppCompatActivity {
                 // 选择颜色对话框
                 ColorPickerPopup colorPickerPopup = new ColorPickerPopup.Builder(LabelManagerActivity.this)
                         .initialColor(Color.RED) // Set initial color
-//                        .enableBrightness(true) // Enable brightness slider or not
-//                        .enableAlpha(true) // Enable alpha slider or not
                         .okTitle("选择")
                         .cancelTitle("取消")
-//                        .showIndicator(true)
-//                        .showValue(true)
                         .build();
-                        colorPickerPopup.show(v, new ColorPickerPopup.ColorPickerObserver() {
-                            @Override
-                            public void onColorPicked(int color) {
-                                v.setBackgroundColor(color);
-//                                Color labelColor = Color.valueOf(color);
-//                                v.setTag(labelColor);
-                                v.setTag(new Integer(color));
-                                ((Button)v).setText("#"+Integer.toHexString(color));
-                            }
-                        });
+                colorPickerPopup.show(v, new ColorPickerPopup.ColorPickerObserver() {
+                    @Override
+                    public void onColorPicked(int color) {
+                        v.setBackgroundColor(color);
+                        v.setTag(new Integer(color));
+                        ((Button) v).setText("#" + Integer.toHexString(color));
+                    }
+                });
 
             });
 
             // 添加
             btnAdd.setOnClickListener(view1 -> {
-                Log.d("test", "init: hello");
+
+                // 获取标签名称
                 EditText etName = dialogView.findViewById(R.id.etLabelName);
                 String name = etName.getText().toString();
                 // 检测是否为空
-                if (name == null || name == ""){
+                if (name == null || name == "") {
                     Toast.makeText(getApplicationContext(), "请输入名称", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // 检测是否存在
-                if (taskViewModel.isLabelExisted(name)){
+                if (taskViewModel.isLabelExisted(name)) {
                     Toast.makeText(getApplicationContext(), "已存在！", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Label label = new Label();
+                // 获取颜色，默认设置为灰色
                 Integer color;
-                if(btnColor.getTag() == null){
+                if (btnColor.getTag() == null) {
                     Log.d("test", "init: 未选择颜色");
                     color = Color.GRAY;
-                }else {
+                } else {
                     color = (Integer) btnColor.getTag();
                 }
+
+                // 创建Label对象
+                Label label = new Label();
                 label.setName(name);
-                if (color != null){
-                    label.setColor(color);
-                }
+                label.setColor(color);
                 label.setCreateTime(new Date().toString());
 
-                if (name == null){
-                    Toast.makeText(getApplicationContext(), "请输入标签名称！", Toast.LENGTH_SHORT).show();
-                }else {
-                    Log.d("test", "init: label:"+label.toString());
-                    taskViewModel.insertLabels(label);
-                }
+                // 插入
+                taskViewModel.insertLabels(label);
                 Toast.makeText(getApplicationContext(), "已添加" + label.getName(), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
 

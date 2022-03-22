@@ -87,7 +87,6 @@ public class AddTaskActivity extends AppCompatActivity {
                 Label label = labels.get(i);
                 Chip chip = new Chip(this);
                 chip.setCheckable(true);
-//                chip.setCloseIconVisible(true);
                 chip.setText(label.getName());
                 chip.setBackgroundColor(label.getColor());
                 binding.cgLabel.addView(chip);

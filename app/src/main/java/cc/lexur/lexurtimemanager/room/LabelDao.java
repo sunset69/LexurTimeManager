@@ -24,7 +24,7 @@ public interface LabelDao {
     @Query("SELECT * FROM label ORDER BY id DESC")
     LiveData<List<Label>> getAllLabels();
 
-    @Query("SELECT * FROM label where name like '%' || :name || '%' ORDER BY ID DESC")
+    @Query("SELECT * FROM label where name = :name ORDER BY ID DESC")
     List<Label> getLabelByName(String name);
 
 }
