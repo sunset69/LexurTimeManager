@@ -35,6 +35,7 @@ import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.ActivityLabelManagerBinding;
 import cc.lexur.lexurtimemanager.room.Label;
+import cc.lexur.lexurtimemanager.utils.ChipUtils;
 import top.defaults.colorpicker.ColorPickerPopup;
 
 public class LabelManagerActivity extends AppCompatActivity {
@@ -62,7 +63,7 @@ public class LabelManagerActivity extends AppCompatActivity {
                 Label label = labels.get(i);
                 Chip chip = new Chip(this);
                 chip.setText(label.getName());
-                chip.setBackgroundColor(label.getColor());
+                chip.setChipBackgroundColor(ChipUtils.setChipColor(label.getColor()));
                 binding.cgLabelManager.addView(chip);
             }
         });
@@ -125,7 +126,13 @@ public class LabelManagerActivity extends AppCompatActivity {
                 }
 
                 Label label = new Label();
-                Integer color = (Integer) btnColor.getTag();
+                Integer color;
+                if(btnColor.getTag() == null){
+                    Log.d("test", "init: 未选择颜色");
+                    color = Color.GRAY;
+                }else {
+                    color = (Integer) btnColor.getTag();
+                }
                 label.setName(name);
                 if (color != null){
                     label.setColor(color);
