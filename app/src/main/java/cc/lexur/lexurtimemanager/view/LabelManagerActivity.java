@@ -113,6 +113,17 @@ public class LabelManagerActivity extends AppCompatActivity {
                 Log.d("test", "init: hello");
                 EditText etName = dialogView.findViewById(R.id.etLabelName);
                 String name = etName.getText().toString();
+                // 检测是否为空
+                if (name == null || name == ""){
+                    Toast.makeText(getApplicationContext(), "请输入名称", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // 检测是否存在
+                if (taskViewModel.isLabelExisted(name)){
+                    Toast.makeText(getApplicationContext(), "已存在！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Label label = new Label();
                 Integer color = (Integer) btnColor.getTag();
                 label.setName(name);
@@ -127,6 +138,7 @@ public class LabelManagerActivity extends AppCompatActivity {
                     Log.d("test", "init: label:"+label.toString());
                     taskViewModel.insertLabels(label);
                 }
+                Toast.makeText(getApplicationContext(), "已添加" + label.getName(), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
 
             });
