@@ -67,7 +67,7 @@ public class LabelManagerActivity extends AppCompatActivity {
                 chip.setOnCloseIconClickListener(view -> {
                     new AlertDialog.Builder(this)
                             .setTitle("删除标签")
-                            .setMessage("是否删除"+label.getName()+"!")
+                            .setMessage("是否删除" + label.getName() + "!")
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -75,21 +75,89 @@ public class LabelManagerActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "已删除" + label.getName(), Toast.LENGTH_SHORT).show();
                                 }
                             })
-                            .setNegativeButton("取消",null)
+                            .setNegativeButton("取消", null)
                             .show();
                 });
+
+                /**
+                 * 长按跳出界面
+                 */
                 chip.setLongClickable(true);
                 chip.setOnLongClickListener(v -> {
+
+                    Label labelModify = label;
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     AlertDialog dialog = builder.create();
                     dialog.show();
 
-                    View viewDialog = LayoutInflater.from(this).inflate(R.layout.dialog_add_label, null);
-                    ((EditText) viewDialog.findViewById(R.id.etLabelName)).setText(label.getName());
-                    ((Button) viewDialog.findViewById(R.id.btnColor)).setBackgroundColor(label.getColor());
+                    View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_label, null);
+                    Button btnAdd = dialogView.findViewById(R.id.btnAdd);
+                    Button btnColor = dialogView.findViewById(R.id.btnColor);
+                    EditText etName = dialogView.findViewById(R.id.etLabelName);
+                    Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+                    btnAdd.setText("modify");
+                    etName.setText(label.getName());
+                    btnColor.setBackgroundColor(label.getColor());
 
-                    dialog.getWindow().setContentView(viewDialog);
+                    // 选择颜色
+                    btnColor.setOnClickListener(view -> {
+                        ColorPickerPopup colorPickerPopup = new ColorPickerPopup.Builder(v.getContext())
+                                .initialColor(Color.RED) // Set initial color
+                                .okTitle("选择")
+                                .cancelTitle("取消")
+                                .build();
+                        colorPickerPopup.show(view, new ColorPickerPopup.ColorPickerObserver() {
+                            @Override
+                            public void onColorPicked(int color) {
+                                view.setBackgroundColor(color);
+                                view.setTag(new Integer(color));
+                                ((Button) v).setText("#" + Integer.toHexString(color));
+                            }
+                        });
+
+                    });
+
+                    // 添加
+                    btnAdd.setOnClickListener(view1 -> {
+
+                        // 获取标签名称
+                        String name = etName.getText().toString();
+                        Toast.makeText(getApplicationContext(), "名称："+name+".", Toast.LENGTH_SHORT).show();
+                        // 检测是否为空
+                        if (name.equals("")) {
+                            Toast.makeText(getApplicationContext(), "请输入名称", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        // 获取颜色，默认设置为灰色
+                        Integer color;
+                        if (btnColor.getTag() == null) {
+                            color = label.getColor();
+                        } else {
+                            color = (Integer) btnColor.getTag();
+                        }
+
+                        // 创建Label对象
+                        Label labelUpdate = new Label();
+                        labelUpdate.setId(label.getId());
+                        labelUpdate.setName(name);
+                        labelUpdate.setColor(color);
+                        labelUpdate.setCreateTime(new Date().toString());
+
+                        // 插入
+                        taskViewModel.updateLabels(labelUpdate);
+                        Toast.makeText(getApplicationContext(), "已添加" + label.getName(), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+
+                    });
+
+                    // 取消
+                    btnCancel.setOnClickListener(view -> {
+                        dialog.dismiss();
+                    });
+
+                    dialog.getWindow().setContentView(dialogView);
                     dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
                     return false;
@@ -116,8 +184,6 @@ public class LabelManagerActivity extends AppCompatActivity {
 
             // 选择颜色
             btnColor.setOnClickListener(v -> {
-
-                // 选择颜色对话框
                 ColorPickerPopup colorPickerPopup = new ColorPickerPopup.Builder(LabelManagerActivity.this)
                         .initialColor(Color.RED) // Set initial color
                         .okTitle("选择")
