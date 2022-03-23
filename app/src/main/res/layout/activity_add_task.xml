@@ -93,10 +93,10 @@
 
                     <TextView
                         android:id="@+id/selectDate"
-                        android:layout_width="250dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/standard_margin"
                         android:layout_marginEnd="@dimen/standard_margin"
+                        android:background="@drawable/rounded_rectangle"
                         android:ems="10"
                         android:hint="@string/select_date"
                         android:minHeight="48dp"
@@ -121,10 +121,10 @@
 
                     <TextView
                         android:id="@+id/selectTime"
-                        android:layout_width="250dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/standard_margin"
                         android:layout_marginEnd="@dimen/standard_margin"
+                        android:background="@drawable/rounded_rectangle"
                         android:ems="10"
                         android:hint="@string/select_time"
                         android:minHeight="48dp"
