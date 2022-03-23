@@ -67,13 +67,7 @@ public class SummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.button.setOnClickListener(v -> {
-            if (taskViewModel.isLabelExisted(binding.editTextTextPersonName.getText().toString())) {
-                Toast.makeText(getContext(), "存在", Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(getContext(), "不存在", Toast.LENGTH_SHORT).show();
-            }
-        });
+
 
 
     }
