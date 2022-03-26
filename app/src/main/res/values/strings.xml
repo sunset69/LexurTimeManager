@@ -38,5 +38,6 @@
     <string name="color">Color:</string>
     <string name="input_label_name">Input Label Name</string>
     <string name="select_color">Select color</string>
+    <string name="task_type">task type</string>
 
 </resources>
