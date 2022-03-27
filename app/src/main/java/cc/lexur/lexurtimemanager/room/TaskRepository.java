@@ -31,6 +31,7 @@ public class TaskRepository {
     }
 
     // 为实现AsyncTask静态内部类提供访问的接口
+
     // Task相关
     public void insertTasks(Task... tasks) {
         new InsertAsyncTask(taskDao).execute(tasks);
@@ -46,6 +47,17 @@ public class TaskRepository {
 
     public void clearTasks() {
         new ClearAsyncTask(taskDao).execute();
+    }
+
+    public List<Task> getTasksByLabel(Label label){
+        List<Task> tasks = new ArrayList<>();
+        try {
+            tasks = new GetTasksByLabelId(taskDao).execute(label.getId()).get();
+            return tasks;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return tasks;
+        }
     }
 
     // 查询方法默认异步线程
@@ -197,6 +209,20 @@ public class TaskRepository {
         protected List<Label> doInBackground(String... strings) {
             List<Label> labels = dao.getLabelByName(strings[0]);
             return labels;
+        }
+    }
+
+    private class GetTasksByLabelId extends AsyncTask<Integer,Void,List<Task>>{
+        TaskDao dao;
+
+        public GetTasksByLabelId(TaskDao dao) {
+            this.dao = dao;
+        }
+
+        @Override
+        protected List<Task> doInBackground(Integer... integers) {
+            List<Task> tasks = dao.getTasksByLabelId(integers[0]);
+            return tasks;
         }
     }
 }

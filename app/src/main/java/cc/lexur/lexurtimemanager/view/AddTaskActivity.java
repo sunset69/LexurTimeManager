@@ -128,7 +128,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 task.setLabelId(0);
             }else {
                 Chip selectedChip = (Chip) binding.cgLabel.getChildAt(binding.cgLabel.getCheckedChipId());
-                task.setLabelId(selectId);
+                task.setLabelId(selectedChip.getId());
             }
 
 

@@ -32,6 +32,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -55,11 +56,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.FragmentSummaryBinding;
 import cc.lexur.lexurtimemanager.room.Label;
+import cc.lexur.lexurtimemanager.room.Task;
 import cc.lexur.lexurtimemanager.utils.Text2Markdown;
 import cc.lexur.lexurtimemanager.utils.TimePicker;
 
@@ -92,6 +95,24 @@ public class SummaryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         addPieChart();
+
+        binding.test.setOnClickListener(v -> {
+            List<Task> tasks = taskViewModel.getAllTasksLive().getValue();
+            Log.d("test", "onViewCreated: 所有Tasks");
+            for (Task task : tasks) {
+                Log.d("test", "onViewCreated: "+task.toString());
+            }
+            Log.d("test", "onViewCreated: ==========================================");
+            List<Label> labels = taskViewModel.getAllLabelsLive().getValue();
+            for (Label label : labels) {
+                List<Task> tasksByLabel = taskViewModel.getTasksByLabel(label);
+                Log.i("test", "onViewCreated: 获取包含标签"+label.toString());
+                for (Task task : tasksByLabel) {
+                    Log.i("test", "onViewCreated: " +task.toString());
+                }
+            }
+            Log.d("test", "onViewCreated: ==========================================");
+        });
 
     }
 
@@ -142,7 +163,6 @@ public class SummaryFragment extends Fragment {
 
     private void setData() {
 
-
         // 包装数据
         taskViewModel.getAllLabelsLive().observe(this, labels -> {
             ArrayList<PieEntry> entries = new ArrayList<>();
@@ -169,8 +189,6 @@ public class SummaryFragment extends Fragment {
             pieChart.highlightValues(null);
             pieChart.invalidate();
         });
-
-
 
     }
 

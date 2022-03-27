@@ -27,4 +27,7 @@ public interface TaskDao {
     //LiveData格式的数据在获取时,系统自动会调用Async来处理
     @Query("SELECT * FROM task ORDER BY id DESC")
     LiveData<List<Task>> getAllTasks();  //设置数据为可观察类型LiveData
+
+    @Query("SELECT * FROM task where label_id = :id ORDER BY id DESC")
+    List<Task> getTasksByLabelId(int id);
 }

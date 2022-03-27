@@ -22,6 +22,10 @@ public class TaskViewModel extends AndroidViewModel {
         taskRepository = new TaskRepository(application);
     }
 
+    /**
+     * Task相关
+     */
+
     public LiveData<List<Task>> getAllTasksLive(){
         return taskRepository.getAllTasksLive();
     }
@@ -41,6 +45,14 @@ public class TaskViewModel extends AndroidViewModel {
     public void clearTasks(){
         taskRepository.clearTasks();
     }
+
+    public List<Task> getTasksByLabel(Label label){
+        List<Task> tasks = taskRepository.getTasksByLabel(label);
+        return tasks;
+    }
+    /**
+     * Label相关
+     */
 
     public LiveData<List<Label>> getAllLabelsLive(){
         return taskRepository.getAllLabelsLive();
