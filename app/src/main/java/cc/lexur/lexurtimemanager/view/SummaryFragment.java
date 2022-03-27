@@ -98,20 +98,10 @@ public class SummaryFragment extends Fragment {
 
         binding.test.setOnClickListener(v -> {
             List<Task> tasks = taskViewModel.getAllTasksLive().getValue();
-            Log.d("test", "onViewCreated: 所有Tasks");
-            for (Task task : tasks) {
-                Log.d("test", "onViewCreated: "+task.toString());
-            }
-            Log.d("test", "onViewCreated: ==========================================");
-            List<Label> labels = taskViewModel.getAllLabelsLive().getValue();
-            for (Label label : labels) {
-                List<Task> tasksByLabel = taskViewModel.getTasksByLabel(label);
-                Log.i("test", "onViewCreated: 获取包含标签"+label.toString());
-                for (Task task : tasksByLabel) {
-                    Log.i("test", "onViewCreated: " +task.toString());
-                }
-            }
-            Log.d("test", "onViewCreated: ==========================================");
+            Task task = tasks.get(tasks.size() - 1);
+            Task task1 = taskViewModel.getTaskById(task.getId());
+            Log.d("test", "onViewCreated: 搜索："+task1.toString());
+
         });
 
     }

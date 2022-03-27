@@ -50,6 +50,10 @@ public class TaskViewModel extends AndroidViewModel {
         List<Task> tasks = taskRepository.getTasksByLabel(label);
         return tasks;
     }
+
+    public Task getTaskById(int id){
+        return taskRepository.getTaskByID(id);
+    }
     /**
      * Label相关
      */

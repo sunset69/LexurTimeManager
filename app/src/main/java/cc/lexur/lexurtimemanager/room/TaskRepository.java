@@ -3,15 +3,11 @@ package cc.lexur.lexurtimemanager.room;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import cc.lexur.lexurtimemanager.MainActivity;
 
 public class TaskRepository {
     private LiveData<List<Task>> allTasksLive;
@@ -49,14 +45,25 @@ public class TaskRepository {
         new ClearAsyncTask(taskDao).execute();
     }
 
-    public List<Task> getTasksByLabel(Label label){
+    public List<Task> getTasksByLabel(Label label) {
         List<Task> tasks = new ArrayList<>();
         try {
-            tasks = new GetTasksByLabelId(taskDao).execute(label.getId()).get();
+            tasks = new GetTasksByLabelIdAsyncTask(taskDao).execute(label.getId()).get();
             return tasks;
         } catch (Exception e) {
             e.printStackTrace();
             return tasks;
+        }
+    }
+
+    public Task getTaskByID(int id) {
+        Task task;
+        try {
+            task = new GetTaskByIdAsyncTask(taskDao).execute(id).get();
+            return task;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -212,10 +219,10 @@ public class TaskRepository {
         }
     }
 
-    private class GetTasksByLabelId extends AsyncTask<Integer,Void,List<Task>>{
+    private class GetTasksByLabelIdAsyncTask extends AsyncTask<Integer, Void, List<Task>> {
         TaskDao dao;
 
-        public GetTasksByLabelId(TaskDao dao) {
+        public GetTasksByLabelIdAsyncTask(TaskDao dao) {
             this.dao = dao;
         }
 
@@ -223,6 +230,20 @@ public class TaskRepository {
         protected List<Task> doInBackground(Integer... integers) {
             List<Task> tasks = dao.getTasksByLabelId(integers[0]);
             return tasks;
+        }
+    }
+
+    private class GetTaskByIdAsyncTask extends AsyncTask<Integer, Void, Task> {
+        TaskDao dao;
+
+        public GetTaskByIdAsyncTask(TaskDao dao) {
+            this.dao = dao;
+        }
+
+        @Override
+        protected Task doInBackground(Integer... integers) {
+            Task task = dao.getTaskById(integers[0]);
+            return task;
         }
     }
 }

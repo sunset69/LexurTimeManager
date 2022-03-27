@@ -30,4 +30,7 @@ public interface TaskDao {
 
     @Query("SELECT * FROM task where label_id = :id ORDER BY id DESC")
     List<Task> getTasksByLabelId(int id);
+
+    @Query("SELECT * FROM task where id = :id")
+    Task getTaskById(int id);
 }
