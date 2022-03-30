@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -100,6 +101,8 @@ public class TaskFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         recyclerAdapter = new MyRecyclerAdapter(taskViewModel);
 
@@ -178,11 +181,17 @@ public class TaskFragment extends Fragment {
 
             // 点击事件
             holder.cardView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(view.getContext(), "clicked position:" + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
                     Task task = (Task) view.getTag(R.string.ITEM_TASK_TAG);
                     Log.d("test", "onClick: "+task.toString());
+                    Intent intent = new Intent(view.getContext(), TaskInfoActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("CURRENT_ID", task.getId());
+                    intent.putExtras(bundle);
+                    view.getContext().startActivity(intent);
                 }
             });
 
