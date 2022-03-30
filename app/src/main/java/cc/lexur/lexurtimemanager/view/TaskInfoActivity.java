@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
@@ -24,12 +25,16 @@ public class TaskInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_task_info);
-        taskViewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(getApplication(),this)).get(TaskViewModel.class);
+        taskViewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(getApplication(), this)).get(TaskViewModel.class);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         int current_id = extras.getInt("CURRENT_ID");
         task = taskViewModel.getTaskById(current_id);
-        Log.d("test", "onCreate: 当前task："+task.toString());
+        if (task == null) {
+            Toast.makeText(getApplicationContext(), "发生错误！", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        binding.setTask(task);
         binding.setLifecycleOwner(this);
     }
 }

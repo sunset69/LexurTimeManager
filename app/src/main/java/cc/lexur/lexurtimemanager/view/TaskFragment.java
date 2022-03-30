@@ -179,14 +179,12 @@ public class TaskFragment extends Fragment {
             holder.tvTaskName.setText(task.getName());
             holder.tvTaskDescription.setText(task.getDescription());
 
-            // 点击事件
+            // 点击事件,跳转至任务详情页面
             holder.cardView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(view.getContext(), "clicked position:" + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
                     Task task = (Task) view.getTag(R.string.ITEM_TASK_TAG);
-                    Log.d("test", "onClick: "+task.toString());
                     Intent intent = new Intent(view.getContext(), TaskInfoActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("CURRENT_ID", task.getId());
