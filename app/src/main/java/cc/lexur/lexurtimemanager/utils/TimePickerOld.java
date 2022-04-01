@@ -1,6 +1,5 @@
 package cc.lexur.lexurtimemanager.utils;
 
-import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,20 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import cc.lexur.lexurtimemanager.R;
 
-public class TimePicker {
+public class TimePickerOld {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void showDatePickerDialog(Context context) {
 
@@ -33,7 +28,7 @@ public class TimePicker {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         AlertDialog dialog = builder.create();
 
-        View dialogView = LayoutInflater.from(context).inflate(R.layout.time_picker, null, false);
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.time_picker_old, null, false);
         DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
         Button btnSubmit = dialogView.findViewById(R.id.btnSubmit);
         Button btnCancel = dialogView.findViewById(R.id.btnCancel);

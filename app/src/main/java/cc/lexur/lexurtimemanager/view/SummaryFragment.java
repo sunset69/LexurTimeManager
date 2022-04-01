@@ -1,21 +1,8 @@
 package cc.lexur.lexurtimemanager.view;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.text.Html;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +11,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -46,25 +28,19 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
-import com.zzhoujay.markdown.MarkDown;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.function.Consumer;
 
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.FragmentSummaryBinding;
 import cc.lexur.lexurtimemanager.room.Label;
 import cc.lexur.lexurtimemanager.room.Task;
-import cc.lexur.lexurtimemanager.utils.Text2Markdown;
-import cc.lexur.lexurtimemanager.utils.TimePicker;
+import cc.lexur.lexurtimemanager.utils.DateFormat;
+import cc.lexur.lexurtimemanager.utils.MyTimePicker;
 
 
 /**
@@ -97,11 +73,26 @@ public class SummaryFragment extends Fragment {
         addPieChart();
 
         binding.test.setOnClickListener(v -> {
-            List<Task> tasks = taskViewModel.getAllTasksLive().getValue();
-            Task task = tasks.get(tasks.size() - 1);
-            Task task1 = taskViewModel.getTaskById(task.getId());
-            Log.d("test", "onViewCreated: 搜索："+task1.toString());
+//            List<Task> tasks = taskViewModel.getAllTasksLive().getValue();
+//            Task task = tasks.get(tasks.size() - 1);
+//            Task task1 = taskViewModel.getTaskById(task.getId());
+//            Log.d("test", "onViewCreated: 搜索："+task1.toString());
 
+            MyTimePicker.alertDialog(getContext(), v);
+
+        });
+
+        binding.test2.setOnClickListener(v->{
+            Calendar calendar = (Calendar) binding.test.getTag();
+            if (calendar == null){
+//                Toast.makeText(getContext(), "未选择！", Toast.LENGTH_SHORT).show();
+                Log.d("test", "onViewCreated: 未选择！");
+            }else {
+//                Toast.makeText(getContext(), "选择时间："+calendar.toString(), Toast.LENGTH_SHORT).show();
+                String date = DateFormat.getDate(calendar);
+                String time = DateFormat.getTime(calendar);
+                Log.d("test", "alertDialog: 选择时间" + date + " " + time);
+            }
         });
 
     }
