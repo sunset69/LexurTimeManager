@@ -1,7 +1,5 @@
 package cc.lexur.lexurtimemanager.view;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,9 +13,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.chip.Chip;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Date;
 
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
@@ -25,15 +22,12 @@ import cc.lexur.lexurtimemanager.databinding.ActivityAddTaskBinding;
 import cc.lexur.lexurtimemanager.room.Label;
 import cc.lexur.lexurtimemanager.room.Task;
 import cc.lexur.lexurtimemanager.utils.ChipUtils;
-import cc.lexur.lexurtimemanager.utils.DateFormat;
+import cc.lexur.lexurtimemanager.utils.MyTimePicker;
 
 public class AddTaskActivity extends AppCompatActivity {
 
     ActivityAddTaskBinding binding;
     TaskViewModel taskViewModel;
-    Calendar selectedCalendar;
-    private Calendar currentCalendar;
-    private List<Chip> labelChips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,28 +44,14 @@ public class AddTaskActivity extends AppCompatActivity {
      */
     private void init() {
 
-        selectedCalendar = Calendar.getInstance();
-        currentCalendar = Calendar.getInstance();
-
-        // 日期选择
-        binding.selectDate.setOnClickListener(view -> new DatePickerDialog(view.getContext(), (datePicker, i, i1, i2) -> {
-            selectedCalendar.set(i, i1, i2);
-            binding.selectDate.setText(DateFormat.getDate(selectedCalendar));
-            Log.d("test", "onDateSet: date:" + selectedCalendar.getTime());
-        }, currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.get(Calendar.DAY_OF_MONTH))
-                .show());
-
-        // 时间选择
-        binding.selectTime.setOnClickListener(view -> new TimePickerDialog(view.getContext(), (timePicker, i, i1) -> {
-            timePicker.setIs24HourView(true);
-            timePicker.setLayoutMode(1);
-            selectedCalendar.set(Calendar.HOUR, i);
-            selectedCalendar.set(Calendar.MINUTE, i1);
-            binding.selectTime.setText(DateFormat.getTime(selectedCalendar));
-            Log.d("test", "onDateSet: time:" + selectedCalendar.getTime());
-        }, currentCalendar.get(Calendar.HOUR), currentCalendar.get(Calendar.MINUTE), true)
-                .show());
-
+        // 选择开始时间
+        binding.selectStartTime.setOnClickListener(v -> {
+            MyTimePicker.alertDialog(v.getContext(), v);
+        });
+        // 选择结束时间
+        binding.selectStopTime.setOnClickListener(v -> {
+            MyTimePicker.alertDialog(v.getContext(), v);
+        });
 
 
         /**
@@ -85,6 +65,14 @@ public class AddTaskActivity extends AppCompatActivity {
         // 获取分类
         taskViewModel.getAllLabelsLive().observe(this, labels -> {
             binding.cgLabel.removeAllViews();
+            //无分类自动创建
+            if (labels.size() == 0) {
+                Label label = new Label();
+                label.setName("其他");
+                label.setColor(Color.GRAY);
+                taskViewModel.insertLabels(label);
+                return;
+            }
             for (int i = 0; i < labels.size(); i++) {
                 Label label = labels.get(i);
                 Chip chip = new Chip(this);
@@ -93,16 +81,10 @@ public class AddTaskActivity extends AppCompatActivity {
                 chip.setChipBackgroundColor(ChipUtils.setChipColor(label.getColor()));
                 binding.cgLabel.addView(chip);
             }
+            binding.cgLabel.setSingleSelection(true);
+            binding.cgLabel.setSelectionRequired(true);
         });
 
-        // 设置点击事件
-        binding.cgLabel.setOnCheckedChangeListener((group, checkedId) -> {
-            // 使用findViewById来获取控件
-            Chip chipTest = group.findViewById(checkedId);
-            if (chipTest != null){
-                Log.d("test", "init: 选中了："+chipTest.getText());
-            }
-        });
 
         /**
          * 提交与取消按钮
@@ -110,32 +92,65 @@ public class AddTaskActivity extends AppCompatActivity {
 
         // 添加按钮
         binding.btnAdd.setOnClickListener(view -> {
+
+            /**
+             * 获取数据
+             */
+
             String title = binding.etTitle.getText().toString();
             String description = binding.etDescription.getText().toString();
+            Calendar calendarStart;
+            Calendar calendarStop;
+            calendarStart = (Calendar) binding.selectStopTime.getTag();
+            calendarStop = (Calendar) binding.selectStopTime.getTag();
+
+            int selectId = binding.cgLabel.getCheckedChipId();
+            Chip selectedChip = null;
+            for (int i = 0; i < binding.cgLabel.getChildCount(); i++) {
+                Chip child = (Chip) binding.cgLabel.getChildAt(i);
+                if (child.getId() == selectId) {
+                    selectedChip = (Chip) binding.cgLabel.getChildAt(i);
+                }
+            }
+
+
+            /**
+             * 检测是否填写
+             */
             if (title.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "请输入标题", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (calendarStart == null) {
+                Toast.makeText(getApplicationContext(), "请选择开始时间！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (calendarStop == null) {
+                Toast.makeText(getApplicationContext(), "请选择结束时间！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (selectedChip == null || selectedChip.getId() == -1) {
+                Toast.makeText(getApplicationContext(), "请选择分类！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            /**
+             * 封装数据并提交
+             */
+
             Task task = new Task();
             task.setName(title);
             task.setDescription(description);
-//                task.setCreateTime(new Date());
+            task.setCreateTime(new Date());
+            task.setStartTime(calendarStart.getTime());
+            task.setStartTime(calendarStop.getTime());
+            task.setLabelId(selectedChip.getId());
+
             taskViewModel.insertTasks(task);
 
-            int selectId = binding.cgLabel.getCheckedChipId();
-            // 默认未选择为-1
-            if (selectId == -1){
-                task.setLabelId(0);
-            }else {
-                Chip selectedChip = (Chip) binding.cgLabel.getChildAt(binding.cgLabel.getCheckedChipId());
-                task.setLabelId(selectedChip.getId());
-            }
-
-
-
             Toast.makeText(getApplicationContext(), "添加成功！", Toast.LENGTH_SHORT).show();
-            Log.d("test", "onClick: " + task.toString());
-            finish();
+            Log.d("test", "onClick: 添加了" + task.toString());
+            finish(); //退出
         });
 
         // 取消按钮

@@ -71,6 +71,8 @@ public class MyTimePicker {
             String time = DateFormat.getTime(selectedCalender);
             Log.d("test", "alertDialog: 选择时间" + date + " " + time);
             targetView.setTag(selectedCalender);
+            ((TextView)targetView).setText(DateFormat.getAllTime(selectedCalender));
+
             dialog.dismiss();
         });
         btnCancel.setOnClickListener(v -> dialog.dismiss());
