@@ -84,12 +84,12 @@
 
                     <TextView
                         android:id="@+id/tvDate"
-                        android:layout_width="65dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/standard_margin"
                         android:layout_marginEnd="@dimen/standard_margin"
-                        android:text="@string/date"
-                        android:textSize="@dimen/middle_text" />
+                        android:text="@string/start_time"
+                        android:textSize="@dimen/small_text" />
 
                     <TextView
                         android:id="@+id/selectDate"
@@ -98,8 +98,9 @@
                         android:layout_marginEnd="@dimen/standard_margin"
                         android:background="@drawable/rounded_rectangle"
                         android:ems="10"
-                        android:hint="@string/select_date"
+                        android:hint="@string/select_start_time"
                         android:minHeight="48dp"
+                        android:singleLine="true"
                         android:textSize="@dimen/middle_text"
                         tools:ignore="SpeakableTextPresentCheck,TextContrastCheck" />
                 </LinearLayout>
@@ -112,12 +113,12 @@
 
                     <TextView
                         android:id="@+id/tvTime"
-                        android:layout_width="65dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/standard_margin"
                         android:layout_marginEnd="@dimen/standard_margin"
-                        android:text="@string/time"
-                        android:textSize="@dimen/middle_text" />
+                        android:text="@string/stop_time"
+                        android:textSize="@dimen/small_text" />
 
                     <TextView
                         android:id="@+id/selectTime"
@@ -126,8 +127,9 @@
                         android:layout_marginEnd="@dimen/standard_margin"
                         android:background="@drawable/rounded_rectangle"
                         android:ems="10"
-                        android:hint="@string/select_time"
+                        android:hint="@string/select_stop_time"
                         android:minHeight="48dp"
+                        android:singleLine="true"
                         android:textSize="@dimen/middle_text"
                         tools:ignore="SpeakableTextPresentCheck,TextContrastCheck" />
                 </LinearLayout>

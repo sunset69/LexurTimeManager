@@ -42,5 +42,7 @@
     <string name="start_time">Start Time</string>
     <string name="stop_time">Stop Time</string>
     <string name="status">status</string>
+    <string name="select_start_time">select start time</string>
+    <string name="select_stop_time">select stop time</string>
 
 </resources>
