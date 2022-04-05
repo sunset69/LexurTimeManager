@@ -1,6 +1,7 @@
 package cc.lexur.lexurtimemanager.view;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.CellCardBinding;
 import cc.lexur.lexurtimemanager.databinding.FragmentTaskBinding;
 import cc.lexur.lexurtimemanager.room.Task;
+import cc.lexur.lexurtimemanager.utils.TaskStatus;
 
 
 /**
@@ -185,13 +187,14 @@ public class TaskFragment extends Fragment {
                     Task selectedTask = (Task) holder.itemView.getTag(R.string.ITEM_TASK_TAG);
                     switch (menuItem.getItemId()) {
                         case R.id.menuItemDelete:
-//                            taskViewModel.deleteTasks(task12);
-                            Log.d("test", "onBindViewHolder: 删除："+selectedTask);
+                            Log.d("test", "onBindViewHolder: 删除：" + selectedTask);
                             taskViewModel.deleteTasks(selectedTask);
-                            Toast.makeText(v.getContext(), "删除：", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(v.getContext(), v.getContext().getString(R.string.delete) +" "+ selectedTask.getName(), Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.menuItemArchive:
-                            Toast.makeText(v.getContext(), "归档：", Toast.LENGTH_SHORT).show();
+                            selectedTask.setStatus(TaskStatus.FINISH);
+                            taskViewModel.updateTasks(selectedTask);
+                            Toast.makeText(v.getContext(), v.getContext().getString(R.string.archive) +" "+ selectedTask.getName(), Toast.LENGTH_SHORT).show();
                     }
                     return false;
                 });
@@ -216,7 +219,6 @@ public class TaskFragment extends Fragment {
          */
         protected class MyViewHolder extends RecyclerView.ViewHolder {
 
-            private CellCardBinding binding;
             TextView tvTaskName, tvTaskDescription;
             CardView cardView;
 

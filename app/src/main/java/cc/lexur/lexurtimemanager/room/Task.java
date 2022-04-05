@@ -21,7 +21,7 @@ public class Task {
     @ColumnInfo(name = "create_time")
     private Date createTime;
 
-    private boolean status;
+    private int status;
 
     @ColumnInfo(name = "label_id")
     private int labelId;
@@ -99,19 +99,20 @@ public class Task {
         this.createTime = createTime;
     }
 
-    public boolean isStatus() {
+
+    public int getStatus() {
         return status;
     }
 
     /**
      * status状态：
      *  0：正在进行
-     *  1：
-     *  2：
-     *  3：
+     *  1：延期
+     *  2：放弃
+     *  3：结束
      * @param status
      */
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
