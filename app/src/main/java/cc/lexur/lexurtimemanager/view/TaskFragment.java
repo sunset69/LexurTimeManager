@@ -1,6 +1,5 @@
 package cc.lexur.lexurtimemanager.view;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +22,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,7 +50,7 @@ public class TaskFragment extends Fragment {
     }
 
     /**
-     * 渲染菜单
+     * 工具栏菜单
      *
      * @param menu
      * @param inflater
@@ -63,29 +61,18 @@ public class TaskFragment extends Fragment {
         inflater.inflate(R.menu.task_menu, menu);
         MenuItem itemAdd = menu.findItem(R.id.menuItemAdd);
         MenuItem itemClear = menu.findItem(R.id.menuItemClear);
-        itemAdd.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                startActivity(new Intent(getContext(), AddTaskActivity.class));
-                return true;
-            }
+        itemAdd.setOnMenuItemClickListener(menuItem -> {
+            startActivity(new Intent(getContext(), AddTaskActivity.class));
+            return true;
         });
-        itemClear.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("警告")
-                        .setMessage("确认清空数据！")
-                        .setNegativeButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                taskViewModel.clearTasks();
-                            }
-                        })
-                        .setPositiveButton("取消", null)
-                        .show();
-                return true;
-            }
+        itemClear.setOnMenuItemClickListener(menuItem -> {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("警告")
+                    .setMessage("确认清空数据！")
+                    .setNegativeButton("确定", (dialogInterface, i) -> taskViewModel.clearTasks())
+                    .setPositiveButton("取消", null)
+                    .show();
+            return true;
         });
     }
 
@@ -174,49 +161,42 @@ public class TaskFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             //获取当前位置的一行数据
             Task task = allTasks.get(position);
-            holder.cardView.setTag(R.string.ITEM_TASK_TAG, task);
+//            holder.cardView.setTag(R.string.ITEM_TASK_TAG, task);
+            holder.itemView.setTag(R.string.ITEM_TASK_TAG, task);
             //设置数据
             holder.tvTaskName.setText(task.getName());
             holder.tvTaskDescription.setText(task.getDescription());
 
             // 点击事件,跳转至任务详情页面
-            holder.cardView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    Task task = (Task) view.getTag(R.string.ITEM_TASK_TAG);
-                    Intent intent = new Intent(view.getContext(), TaskInfoActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("CURRENT_ID", task.getId());
-                    intent.putExtras(bundle);
-                    view.getContext().startActivity(intent);
-                }
+            holder.cardView.setOnClickListener(view -> {
+                Task task1 = (Task) view.getTag(R.string.ITEM_TASK_TAG);
+                Intent intent = new Intent(view.getContext(), TaskInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("CURRENT_ID", task1.getId());
+                intent.putExtras(bundle);
+                view.getContext().startActivity(intent);
             });
 
             // 长按事件
-            holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-                    popupMenu.getMenuInflater().inflate(R.menu.cell_card_menu, popupMenu.getMenu());
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            Task task = (Task) holder.itemView.getTag(R.string.ITEM_TASK_TAG);
-                            switch (menuItem.getItemId()) {
-                                case R.id.menuItemDelete:
-                                    taskViewModel.deleteTasks(task);
-                                    Toast.makeText(view.getContext(), "删除：" + task.getName(), Toast.LENGTH_SHORT).show();
-                                    break;
-                                case R.id.menuItemArchive:
-                                    Toast.makeText(view.getContext(), "归档：" + ((Task) holder.itemView.getTag(R.string.ITEM_TASK_TAG)).getId(), Toast.LENGTH_SHORT).show();
-                            }
-                            return false;
-                        }
-                    });
-                    popupMenu.show();
+            holder.cardView.setOnLongClickListener(v -> {
+                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+                popupMenu.getMenuInflater().inflate(R.menu.cell_card_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(menuItem -> {
+                    Task selectedTask = (Task) holder.itemView.getTag(R.string.ITEM_TASK_TAG);
+                    switch (menuItem.getItemId()) {
+                        case R.id.menuItemDelete:
+//                            taskViewModel.deleteTasks(task12);
+                            Log.d("test", "onBindViewHolder: 删除："+selectedTask);
+                            taskViewModel.deleteTasks(selectedTask);
+                            Toast.makeText(v.getContext(), "删除：", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.menuItemArchive:
+                            Toast.makeText(v.getContext(), "归档：", Toast.LENGTH_SHORT).show();
+                    }
                     return false;
-                }
+                });
+                popupMenu.show();
+                return false;
             });
 
         }

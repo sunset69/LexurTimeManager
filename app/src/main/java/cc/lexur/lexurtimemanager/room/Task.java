@@ -103,6 +103,14 @@ public class Task {
         return status;
     }
 
+    /**
+     * status状态：
+     *  0：正在进行
+     *  1：
+     *  2：
+     *  3：
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }
