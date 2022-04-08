@@ -104,6 +104,12 @@ public class TaskFragment extends Fragment {
 
         //为实现LiveData的数据设置观察者，以便当数据改变时通知UI更新数据
         taskViewModel.getAllTasksLive().observe(requireActivity(), tasks -> {
+            for (Task task : tasks) {
+                if (task.getStatus() == TaskStatus.DOING && task.getStopTime().before(Calendar.getInstance().getTime())) {
+                    task.setStatus(TaskStatus.DELAY);
+                    taskViewModel.updateTasks(task);
+                }
+            }
             recyclerAdapter.setAllWords(tasks);
             recyclerAdapter.notifyDataSetChanged();
         });
@@ -257,11 +263,6 @@ public class TaskFragment extends Fragment {
                 taskViewModel.updateTasks(clickedTask);
             });
 
-//            // 检测是否过时，如果过时则修改状态
-//            if (Calendar.getInstance().getTime().after(task.getStartTime())) {
-//                task.setStatus(TaskStatus.DELAY);
-//                taskViewModel.updateTasks(task);
-//            }
         }
 
         /**
