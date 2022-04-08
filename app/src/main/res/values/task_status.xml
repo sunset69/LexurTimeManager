@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="doing">#f9fbba</color>
+    <color name="delay">#d4edf4</color>
+    <color name="abort">#f6c2c2</color>
+    <color name="finish">#e2f2d5</color>
+
+    <string name="doing">doing</string>
+    <string name="delay">delay</string>
+    <string name="abort">abort</string>
+    <string name="finish">finish</string>
+</resources>

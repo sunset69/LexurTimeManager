@@ -1,6 +1,9 @@
 package cc.lexur.lexurtimemanager.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -26,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import cc.lexur.lexurtimemanager.R;
@@ -97,12 +103,9 @@ public class TaskFragment extends Fragment {
         binding.recyclerView.setAdapter(recyclerAdapter);
 
         //为实现LiveData的数据设置观察者，以便当数据改变时通知UI更新数据
-        taskViewModel.getAllTasksLive().observe(requireActivity(), new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                recyclerAdapter.setAllWords(tasks);
-                recyclerAdapter.notifyDataSetChanged();
-            }
+        taskViewModel.getAllTasksLive().observe(requireActivity(), tasks -> {
+            recyclerAdapter.setAllWords(tasks);
+            recyclerAdapter.notifyDataSetChanged();
         });
     }
 
@@ -116,6 +119,7 @@ public class TaskFragment extends Fragment {
         private List<Task> allTasks = new ArrayList<>();
         TaskViewModel taskViewModel;
         CellCardBinding binding;
+        private Context context;
 
         /**
          * 构造函数，传入ViewModel
@@ -149,11 +153,12 @@ public class TaskFragment extends Fragment {
             //RecyclerView中调用DataBinding，绑定布局，获取binding实例
             binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.cell_card, parent, false);
             //把binding作为参数，返回一个自定义的MyViewHolder
+            context = binding.getRoot().getContext();
             return new MyViewHolder(binding);
         }
 
         /**
-         * 当调用ViewHolder时响应
+         * 当调用ViewHolder时响应,渲染页面
          *
          * @param holder
          * @param position
@@ -162,10 +167,36 @@ public class TaskFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             //获取当前位置的一行数据
             Task task = allTasks.get(position);
+
+
+            String status = "";
+            int color = Color.GRAY;
+
+            switch (task.getStatus()) {
+                case TaskStatus.DOING:
+                    status = "doing";
+                    color = ContextCompat.getColor(context, R.color.doing);
+                    break;
+                case TaskStatus.DELAY:
+                    status = "delay";
+                    color = ContextCompat.getColor(context, R.color.delay);
+                    break;
+                case TaskStatus.ABORT:
+                    status = "abort";
+                    color = ContextCompat.getColor(context, R.color.abort);
+                    break;
+                case TaskStatus.FINISH:
+                    status = "finish";
+                    color = ContextCompat.getColor(context, R.color.finish);
+                    break;
+            }
+
             holder.cardView.setTag(R.string.ITEM_TASK_TAG, task);
             //设置数据
             holder.tvTaskName.setText(task.getName());
             holder.tvTaskDescription.setText(task.getDescription());
+            holder.tvStatus.setText(status);
+            holder.cardView.setBackgroundColor(color);
 
             // 点击事件,跳转至任务详情页面
             holder.cardView.setOnClickListener(view -> {
@@ -179,20 +210,36 @@ public class TaskFragment extends Fragment {
 
             // 长按事件
             holder.cardView.setOnLongClickListener(v -> {
+                Log.d("test", "onBindViewHolder: 长按事件");
                 PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
                 popupMenu.getMenuInflater().inflate(R.menu.cell_card_menu, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     Task selectedTask = (Task) holder.cardView.getTag(R.string.ITEM_TASK_TAG);
                     switch (menuItem.getItemId()) {
+
                         case R.id.menuItemDelete:
                             Log.d("test", "onBindViewHolder: 删除：" + selectedTask);
                             taskViewModel.deleteTasks(selectedTask);
                             Toast.makeText(v.getContext(), v.getContext().getString(R.string.delete) + " " + selectedTask.getName(), Toast.LENGTH_SHORT).show();
                             break;
+
                         case R.id.menuItemArchive:
                             selectedTask.setStatus(TaskStatus.FINISH);
                             taskViewModel.updateTasks(selectedTask);
                             Toast.makeText(v.getContext(), v.getContext().getString(R.string.archive) + " " + selectedTask.getName(), Toast.LENGTH_SHORT).show();
+                            break;
+
+                        case R.id.menuItemDoing:
+                            selectedTask.setStatus(TaskStatus.DOING);
+                            taskViewModel.updateTasks(selectedTask);
+                            break;
+
+                        case R.id.menuItemAbort:
+                            selectedTask.setStatus(TaskStatus.ABORT);
+                            taskViewModel.updateTasks(selectedTask);
+                            Toast.makeText(v.getContext(), v.getContext().getString(R.string.abort) + " " + selectedTask.getName(), Toast.LENGTH_SHORT).show();
+                            break;
+
                     }
                     return false;
                 });
@@ -200,6 +247,21 @@ public class TaskFragment extends Fragment {
                 return false;
             });
 
+            holder.checkBox.setOnClickListener(view -> {
+                Task clickedTask = (Task) holder.cardView.getTag(R.string.ITEM_TASK_TAG);
+                if (holder.checkBox.isChecked()) {
+                    clickedTask.setStatus(TaskStatus.FINISH);
+                } else {
+                    clickedTask.setStatus(TaskStatus.DOING);
+                }
+                taskViewModel.updateTasks(clickedTask);
+            });
+
+//            // 检测是否过时，如果过时则修改状态
+//            if (Calendar.getInstance().getTime().after(task.getStartTime())) {
+//                task.setStatus(TaskStatus.DELAY);
+//                taskViewModel.updateTasks(task);
+//            }
         }
 
         /**
@@ -217,14 +279,17 @@ public class TaskFragment extends Fragment {
          */
         protected class MyViewHolder extends RecyclerView.ViewHolder {
 
-            TextView tvTaskName, tvTaskDescription;
+            TextView tvTaskName, tvTaskDescription, tvStatus;
             CardView cardView;
+            CheckBox checkBox;
 
             public MyViewHolder(CellCardBinding binding) {
                 super(binding.getRoot());
                 tvTaskName = binding.tvTaskName;
                 tvTaskDescription = binding.tvTaskDescription;
+                tvStatus = binding.tvStatus;
                 cardView = binding.cardView;
+                checkBox = binding.checkBox;
             }
         }
     }

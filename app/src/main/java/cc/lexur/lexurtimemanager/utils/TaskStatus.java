@@ -1,8 +1,8 @@
 package cc.lexur.lexurtimemanager.utils;
 
 public class TaskStatus {
-    public static int DOING = 0;
-    public static int DELAY = 1;
-    public static int ABORT = 3;
-    public static int FINISH = 5;
+    public static final int DOING = 0;
+    public static final int DELAY = 1;
+    public static final int ABORT = 3;
+    public static final int FINISH = 5;
 }

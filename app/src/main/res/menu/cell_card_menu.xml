@@ -2,9 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menuItemDelete"
-        android:title="delete" />
+        android:id="@+id/menuItemDoing"
+        android:title="@string/doing" />
     <item
         android:id="@+id/menuItemArchive"
-        android:title="archive" />
+        android:title="@string/archive" />
+    <item
+        android:id="@+id/menuItemAbort"
+        android:title="@string/abort" />
+    <item
+        android:id="@+id/menuItemDelete"
+        android:title="@string/delete" />
 </menu>
