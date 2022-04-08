@@ -1,7 +1,6 @@
 package cc.lexur.lexurtimemanager.view;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -163,18 +162,17 @@ public class TaskFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             //获取当前位置的一行数据
             Task task = allTasks.get(position);
-//            holder.cardView.setTag(R.string.ITEM_TASK_TAG, task);
-            holder.itemView.setTag(R.string.ITEM_TASK_TAG, task);
+            holder.cardView.setTag(R.string.ITEM_TASK_TAG, task);
             //设置数据
             holder.tvTaskName.setText(task.getName());
             holder.tvTaskDescription.setText(task.getDescription());
 
             // 点击事件,跳转至任务详情页面
             holder.cardView.setOnClickListener(view -> {
-                Task task1 = (Task) view.getTag(R.string.ITEM_TASK_TAG);
+                Task clickedTask = (Task) view.getTag(R.string.ITEM_TASK_TAG);
                 Intent intent = new Intent(view.getContext(), TaskInfoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("CURRENT_ID", task1.getId());
+                bundle.putInt("CURRENT_ID", clickedTask.getId());
                 intent.putExtras(bundle);
                 view.getContext().startActivity(intent);
             });
@@ -184,17 +182,17 @@ public class TaskFragment extends Fragment {
                 PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
                 popupMenu.getMenuInflater().inflate(R.menu.cell_card_menu, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
-                    Task selectedTask = (Task) holder.itemView.getTag(R.string.ITEM_TASK_TAG);
+                    Task selectedTask = (Task) holder.cardView.getTag(R.string.ITEM_TASK_TAG);
                     switch (menuItem.getItemId()) {
                         case R.id.menuItemDelete:
                             Log.d("test", "onBindViewHolder: 删除：" + selectedTask);
                             taskViewModel.deleteTasks(selectedTask);
-                            Toast.makeText(v.getContext(), v.getContext().getString(R.string.delete) +" "+ selectedTask.getName(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(v.getContext(), v.getContext().getString(R.string.delete) + " " + selectedTask.getName(), Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.menuItemArchive:
                             selectedTask.setStatus(TaskStatus.FINISH);
                             taskViewModel.updateTasks(selectedTask);
-                            Toast.makeText(v.getContext(), v.getContext().getString(R.string.archive) +" "+ selectedTask.getName(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(v.getContext(), v.getContext().getString(R.string.archive) + " " + selectedTask.getName(), Toast.LENGTH_SHORT).show();
                     }
                     return false;
                 });
