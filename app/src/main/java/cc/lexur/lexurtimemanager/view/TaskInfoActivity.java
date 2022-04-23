@@ -15,6 +15,10 @@ import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.ActivityTaskInfoBinding;
 import cc.lexur.lexurtimemanager.room.Task;
 
+/**
+ * 任务详情界面
+ */
+
 public class TaskInfoActivity extends AppCompatActivity {
 
     ActivityTaskInfoBinding binding;

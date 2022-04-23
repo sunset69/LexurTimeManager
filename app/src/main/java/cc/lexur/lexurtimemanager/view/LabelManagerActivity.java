@@ -38,6 +38,10 @@ import cc.lexur.lexurtimemanager.room.Label;
 import cc.lexur.lexurtimemanager.utils.ChipUtils;
 import top.defaults.colorpicker.ColorPickerPopup;
 
+/**
+ * 标签管理界面
+ */
+
 public class LabelManagerActivity extends AppCompatActivity {
 
     ActivityLabelManagerBinding binding;

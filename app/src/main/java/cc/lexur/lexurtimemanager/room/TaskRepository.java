@@ -24,6 +24,7 @@ public class TaskRepository {
         //LiveData格式的数据在获取时,系统自动会调用Async来处理
         allTasksLive = taskDao.getAllTasks();
         allLabelsLive = labelDao.getAllLabels();
+
     }
 
     // 为实现AsyncTask静态内部类提供访问的接口
@@ -101,7 +102,7 @@ public class TaskRepository {
     }
 
     //把对数据库的操作封装到实现AsyncTask的类中，因为Room对数据库的操作是耗时操作，不允许在主线程中执行。
-    static class InsertAsyncTask extends AsyncTask<Task, Void, Void> {
+    private static class InsertAsyncTask extends AsyncTask<Task, Void, Void> {
 
         private TaskDao dao;
 
@@ -116,7 +117,7 @@ public class TaskRepository {
         }
     }
 
-    static class UpdateAsyncTask extends AsyncTask<Task, Void, Void> {
+    private static class UpdateAsyncTask extends AsyncTask<Task, Void, Void> {
 
         private TaskDao dao;
 
@@ -131,7 +132,7 @@ public class TaskRepository {
         }
     }
 
-    static class DeleteAsyncTask extends AsyncTask<Task, Void, Void> {
+    private static class DeleteAsyncTask extends AsyncTask<Task, Void, Void> {
 
         private TaskDao dao;
 
@@ -146,7 +147,7 @@ public class TaskRepository {
         }
     }
 
-    static class ClearAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class ClearAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private TaskDao dao;
 
@@ -175,7 +176,7 @@ public class TaskRepository {
         }
     }
 
-    static class UpdateAsyncLabel extends AsyncTask<Label, Void, Void> {
+    private static class UpdateAsyncLabel extends AsyncTask<Label, Void, Void> {
 
         private LabelDao dao;
 
@@ -190,7 +191,7 @@ public class TaskRepository {
         }
     }
 
-    static class DeleteAsyncLabel extends AsyncTask<Label, Void, Void> {
+    private static class DeleteAsyncLabel extends AsyncTask<Label, Void, Void> {
 
         private LabelDao dao;
 
@@ -205,7 +206,7 @@ public class TaskRepository {
         }
     }
 
-    static class GetLabelByNameAsyncTask extends AsyncTask<String, Void, List<Label>> {
+    private static class GetLabelByNameAsyncTask extends AsyncTask<String, Void, List<Label>> {
         private LabelDao dao;
 
         public GetLabelByNameAsyncTask(LabelDao dao) {

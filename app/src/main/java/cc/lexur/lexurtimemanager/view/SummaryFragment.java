@@ -33,6 +33,7 @@ import com.github.mikephil.charting.utils.MPPointF;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimerTask;
 
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
@@ -46,6 +47,7 @@ import cc.lexur.lexurtimemanager.utils.MyTimePicker;
 /**
  * 总结页面，提供任务相关总结
  */
+
 public class SummaryFragment extends Fragment {
 
     private static final String TAG = "test";
@@ -55,6 +57,8 @@ public class SummaryFragment extends Fragment {
     private PieChart pieChart;
     private BarChart barChart;
     private LineChart lineChart;
+    private List<Task> allTasks = new ArrayList<>();
+    private List<Label> allLabels = new ArrayList<>();
 
     public SummaryFragment() {
     }
@@ -72,9 +76,26 @@ public class SummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        List<Label> labels = taskViewModel.getAllLabelsLive().getValue();
-        List<Task> tasks = taskViewModel.getAllTasksLive().getValue();
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: 恢复了");
+        allLabels = taskViewModel.getAllLabelsLive().getValue();
+//        allTasks = taskViewModel.getAllTasksLive().getValue();
+
+        Log.d(TAG, "onResume: 所有标签");
+        Log.d(TAG, "onResume: "+taskViewModel.getAllLabelsLive());
+//        for (Label label : allLabels) {
+//            Log.d(TAG, "onResume: "+label.toString());
+//        }
+        Log.d(TAG, "onResume: 所有任务");
+        for (Task task : allTasks) {
+            Log.d(TAG, "onResume: "+task.toString());
+        }
 
     }
 
@@ -122,29 +143,8 @@ public class SummaryFragment extends Fragment {
         pieChart.setEntryLabelTextSize(12f);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: 开始了");
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: 恢复了");
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: 暂停了");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: 停止了");
-    }
 
     private SpannableString generateCenterSpannableText() {
         SpannableString s = new SpannableString(getString(R.string.task_type) + "");

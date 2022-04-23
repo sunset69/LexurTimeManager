@@ -19,6 +19,7 @@ import cc.lexur.lexurtimemanager.databinding.FragmentProfileBinding;
 /**
  * 设置页面，更改软件相关设置
  */
+
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
