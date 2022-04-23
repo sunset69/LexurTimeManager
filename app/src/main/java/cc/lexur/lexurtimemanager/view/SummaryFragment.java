@@ -32,8 +32,10 @@ import com.github.mikephil.charting.utils.MPPointF;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimerTask;
+import java.util.function.BiConsumer;
 
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
@@ -42,6 +44,7 @@ import cc.lexur.lexurtimemanager.room.Label;
 import cc.lexur.lexurtimemanager.room.Task;
 import cc.lexur.lexurtimemanager.utils.DateFormat;
 import cc.lexur.lexurtimemanager.utils.MyTimePicker;
+import cc.lexur.lexurtimemanager.utils.TaskStatus;
 
 
 /**
@@ -84,19 +87,43 @@ public class SummaryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: 恢复了");
-        allLabels = taskViewModel.getAllLabelsLive().getValue();
-//        allTasks = taskViewModel.getAllTasksLive().getValue();
+        taskViewModel.getAllTasksLive().observe(this, tasks -> {
+            getTaskStatus(tasks);
 
-        Log.d(TAG, "onResume: 所有标签");
-        Log.d(TAG, "onResume: "+taskViewModel.getAllLabelsLive());
-//        for (Label label : allLabels) {
-//            Log.d(TAG, "onResume: "+label.toString());
-//        }
-        Log.d(TAG, "onResume: 所有任务");
-        for (Task task : allTasks) {
-            Log.d(TAG, "onResume: "+task.toString());
+        });
+
+    }
+
+    public HashMap<Integer,Integer> getTaskStatus(List<Task> tasks){
+        HashMap<Integer,Integer> data = new HashMap<>();
+        int doing = 0;
+        int delay = 0;
+        int abort = 0;
+        int finish = 0;
+        for (Task task : tasks) {
+            switch (task.getStatus()){
+                case TaskStatus.DOING:
+                    doing++;
+                    break;
+                case TaskStatus.DELAY:
+                    delay++;
+                    break;
+                case TaskStatus.ABORT:
+                    abort++;
+                    break;
+                case TaskStatus.FINISH:
+                    finish++;
+                    break;
+            }
         }
+        data.put(TaskStatus.DOING,doing);
+        data.put(TaskStatus.DELAY,delay);
+        data.put(TaskStatus.ABORT,abort);
+        data.put(TaskStatus.FINISH,finish);
 
+        Log.d(TAG, "getTaskStatus: data:"+data);
+
+        return data;
     }
 
     private void addPieChart() {
