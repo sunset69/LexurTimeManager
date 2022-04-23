@@ -7,12 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,28 +22,19 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.MPPointF;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimerTask;
-import java.util.function.BiConsumer;
 
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.FragmentSummaryBinding;
 import cc.lexur.lexurtimemanager.room.Label;
 import cc.lexur.lexurtimemanager.room.Task;
-import cc.lexur.lexurtimemanager.utils.DateFormat;
-import cc.lexur.lexurtimemanager.utils.MyTimePicker;
 import cc.lexur.lexurtimemanager.utils.TaskStatus;
 
 
@@ -80,28 +71,38 @@ public class SummaryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: 恢复了");
+
+        List<Task> allTasks = taskViewModel.getAllTasksLive().getValue();
+        Log.d(TAG, "onResume: " + allTasks.size());
+
+
         taskViewModel.getAllTasksLive().observe(this, tasks -> {
-            getTaskStatus(tasks);
+            getTaskStatusSummary(tasks);
+            getTaskLabelSummary(tasks);
 
         });
 
     }
 
-    public HashMap<Integer,Integer> getTaskStatus(List<Task> tasks){
-        HashMap<Integer,Integer> data = new HashMap<>();
+    /**
+     * 获取任务状态统计数据
+     * @param tasks 任务
+     * @return 统计数据
+     */
+    public HashMap<Integer, Integer> getTaskStatusSummary(List<Task> tasks) {
+        HashMap<Integer, Integer> data = new HashMap<>();
         int doing = 0;
         int delay = 0;
         int abort = 0;
         int finish = 0;
         for (Task task : tasks) {
-            switch (task.getStatus()){
+            switch (task.getStatus()) {
                 case TaskStatus.DOING:
                     doing++;
                     break;
@@ -116,14 +117,46 @@ public class SummaryFragment extends Fragment {
                     break;
             }
         }
-        data.put(TaskStatus.DOING,doing);
-        data.put(TaskStatus.DELAY,delay);
-        data.put(TaskStatus.ABORT,abort);
-        data.put(TaskStatus.FINISH,finish);
+        data.put(TaskStatus.DOING, doing);
+        data.put(TaskStatus.DELAY, delay);
+        data.put(TaskStatus.ABORT, abort);
+        data.put(TaskStatus.FINISH, finish);
 
-        Log.d(TAG, "getTaskStatus: data:"+data);
+        Log.d(TAG, "getTaskStatus: task status:" + data);
 
         return data;
+    }
+
+    /**
+     * 获取分类相关统计数据
+     * @param tasks 任务
+     * @return 统计数据
+     */
+    public HashMap<Integer, Integer> getTaskLabelSummary(List<Task> tasks) {
+
+        HashMap<Integer, Integer> data = new HashMap<>();
+        HashMap<Label, Integer> result = new HashMap<>();
+
+        for (Task task : tasks) {
+            int labelId = task.getLabelId();
+            if (data.get(labelId) == null) {
+                data.put(labelId, 1);
+            }
+            data.put(labelId, data.get(labelId) + 1);
+        }
+
+        Log.d(TAG, "getTaskLabelSummary: task labels:" + data);
+
+        List<Label> labels = taskViewModel.getAllLabelsLive().getValue();
+        if (labels == null){
+            Log.d(TAG, "getTaskLabelSummary: labels is null!");
+        }else {
+            Log.d(TAG, "getTaskLabelSummary: labels size:" + labels.size());
+        }
+
+
+        return data;
+
     }
 
     private void addPieChart() {
@@ -169,8 +202,6 @@ public class SummaryFragment extends Fragment {
         pieChart.setEntryLabelColor(Color.WHITE);
         pieChart.setEntryLabelTextSize(12f);
     }
-
-
 
 
     private SpannableString generateCenterSpannableText() {
