@@ -51,8 +51,10 @@ public class SummaryFragment extends Fragment {
     private PieChart pieChart;
     private BarChart barChart;
     private LineChart lineChart;
-    private List<Task> allTasks = new ArrayList<>();
-    private List<Label> allLabels = new ArrayList<>();
+    private LiveData<List<Task>> allTasksLive;
+    private LiveData<List<Label>> allLabelsLive;
+    private List<Task> allTasks;
+    private List<Label> allLabels;
 
     public SummaryFragment() {
     }
@@ -62,6 +64,8 @@ public class SummaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary, container, false);
         taskViewModel = new ViewModelProvider(requireActivity(), new SavedStateViewModelFactory(getActivity().getApplication(), requireActivity())).get(TaskViewModel.class);
+        allTasksLive = taskViewModel.getAllTasksLive();
+        allLabelsLive = taskViewModel.getAllLabelsLive();
         pieChart = binding.pieChart;
         return binding.getRoot();
     }
@@ -70,6 +74,12 @@ public class SummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        allTasksLive.observe(this, tasks -> {
+            allTasks = tasks;
+        });
+        allLabelsLive.observe(this, labels -> {
+            allLabels = labels;
+        });
 
     }
 
@@ -78,30 +88,34 @@ public class SummaryFragment extends Fragment {
         super.onResume();
         Log.d(TAG, "onResume: 恢复了");
 
-        List<Task> allTasks = taskViewModel.getAllTasksLive().getValue();
-        Log.d(TAG, "onResume: " + allTasks.size());
+        Log.d(TAG, "onResume: all tasks=====================");
+        for (Task task : allTasks) {
+            Log.d(TAG, "onResume: "+task);
+        }
+        Log.d(TAG, "onResume: all labels=====================");
+        for (Label label : allLabels) {
+            Log.d(TAG, "onResume: "+ label);
+        }
+        Log.d(TAG, "onResume: ===================================");
+
+        getTaskStatusSummary();
+        getTaskLabelSummary();
 
 
-        taskViewModel.getAllTasksLive().observe(this, tasks -> {
-            getTaskStatusSummary(tasks);
-            getTaskLabelSummary(tasks);
-
-        });
 
     }
 
     /**
      * 获取任务状态统计数据
-     * @param tasks 任务
      * @return 统计数据
      */
-    public HashMap<Integer, Integer> getTaskStatusSummary(List<Task> tasks) {
+    public HashMap<Integer, Integer> getTaskStatusSummary() {
         HashMap<Integer, Integer> data = new HashMap<>();
         int doing = 0;
         int delay = 0;
         int abort = 0;
         int finish = 0;
-        for (Task task : tasks) {
+        for (Task task : allTasks) {
             switch (task.getStatus()) {
                 case TaskStatus.DOING:
                     doing++;
@@ -129,15 +143,14 @@ public class SummaryFragment extends Fragment {
 
     /**
      * 获取分类相关统计数据
-     * @param tasks 任务
      * @return 统计数据
      */
-    public HashMap<Integer, Integer> getTaskLabelSummary(List<Task> tasks) {
+    public HashMap<Label, Integer> getTaskLabelSummary() {
 
         HashMap<Integer, Integer> data = new HashMap<>();
         HashMap<Label, Integer> result = new HashMap<>();
 
-        for (Task task : tasks) {
+        for (Task task : allTasks) {
             int labelId = task.getLabelId();
             if (data.get(labelId) == null) {
                 data.put(labelId, 1);
@@ -148,14 +161,13 @@ public class SummaryFragment extends Fragment {
         Log.d(TAG, "getTaskLabelSummary: task labels:" + data);
 
         List<Label> labels = taskViewModel.getAllLabelsLive().getValue();
-        if (labels == null){
-            Log.d(TAG, "getTaskLabelSummary: labels is null!");
-        }else {
-            Log.d(TAG, "getTaskLabelSummary: labels size:" + labels.size());
+        for (Label label : labels) {
+            result.put(label,data.get(label.getId()));
         }
 
+        Log.d(TAG, "getTaskLabelSummary: result:" + result);
 
-        return data;
+        return result;
 
     }
 

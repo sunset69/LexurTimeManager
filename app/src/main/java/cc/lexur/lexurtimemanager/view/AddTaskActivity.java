@@ -73,6 +73,7 @@ public class AddTaskActivity extends AppCompatActivity {
             //无分类自动创建
             if (labels.size() == 0) {
                 Label label = new Label();
+                label.setId(0);
                 label.setName("其他");
                 label.setColor(Color.GRAY);
                 taskViewModel.insertLabels(label);
