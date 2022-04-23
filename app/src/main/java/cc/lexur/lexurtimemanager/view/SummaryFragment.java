@@ -48,6 +48,8 @@ import cc.lexur.lexurtimemanager.utils.MyTimePicker;
  */
 public class SummaryFragment extends Fragment {
 
+    private static final String TAG = "test";
+
     FragmentSummaryBinding binding;
     TaskViewModel taskViewModel;
     private PieChart pieChart;
@@ -61,7 +63,7 @@ public class SummaryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary, container, false);
-        taskViewModel = new ViewModelProvider(requireActivity(), new SavedStateViewModelFactory(requireActivity().getApplication(), requireActivity())).get(TaskViewModel.class);
+        taskViewModel = new ViewModelProvider(requireActivity(), new SavedStateViewModelFactory(getActivity().getApplication(), requireActivity())).get(TaskViewModel.class);
         pieChart = binding.pieChart;
         return binding.getRoot();
     }
@@ -70,30 +72,9 @@ public class SummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        addPieChart();
+        List<Label> labels = taskViewModel.getAllLabelsLive().getValue();
+        List<Task> tasks = taskViewModel.getAllTasksLive().getValue();
 
-        binding.test.setOnClickListener(v -> {
-//            List<Task> tasks = taskViewModel.getAllTasksLive().getValue();
-//            Task task = tasks.get(tasks.size() - 1);
-//            Task task1 = taskViewModel.getTaskById(task.getId());
-//            Log.d("test", "onViewCreated: 搜索："+task1.toString());
-
-            MyTimePicker.alertDialog(getContext(), v);
-
-        });
-
-        binding.test2.setOnClickListener(v->{
-            Calendar calendar = (Calendar) binding.test.getTag();
-            if (calendar == null){
-//                Toast.makeText(getContext(), "未选择！", Toast.LENGTH_SHORT).show();
-                Log.d("test", "onViewCreated: 未选择！");
-            }else {
-//                Toast.makeText(getContext(), "选择时间："+calendar.toString(), Toast.LENGTH_SHORT).show();
-                String date = DateFormat.getDate(calendar);
-                String time = DateFormat.getTime(calendar);
-                Log.d("test", "alertDialog: 选择时间" + date + " " + time);
-            }
-        });
 
     }
 
@@ -139,43 +120,78 @@ public class SummaryFragment extends Fragment {
 
         pieChart.setEntryLabelColor(Color.WHITE);
         pieChart.setEntryLabelTextSize(12f);
-        setData();
     }
 
-    private void setData() {
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: 开始了");
+    }
 
-        // 包装数据
-        taskViewModel.getAllLabelsLive().observe(this, labels -> {
-            ArrayList<PieEntry> entries = new ArrayList<>();
-            ArrayList<Integer> colors = new ArrayList<>();
-            for (int i = 0; i < labels.size(); i++) {
-                Label label = labels.get(i);
-                PieEntry pieEntry = new PieEntry(i,label.getName());
-                entries.add(pieEntry);
-                colors.add(label.getColor());
-            }
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: 恢复了");
+    }
 
-            // 数据处理
-            PieDataSet dataSet = new PieDataSet(entries, getString(R.string.task_type));
-            dataSet.setSliceSpace(3f);
-            dataSet.setIconsOffset(new MPPointF(0, 40));
-            dataSet.setSelectionShift(5f);
-            dataSet.setColors(colors);
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: 暂停了");
+    }
 
-            PieData data = new PieData(dataSet);
-            data.setValueFormatter(new PercentFormatter());
-            data.setValueTextSize(11f);
-            data.setValueTextColor(Color.WHITE);
-            pieChart.setData(data);
-            pieChart.highlightValues(null);
-            pieChart.invalidate();
-        });
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: 停止了");
     }
 
     private SpannableString generateCenterSpannableText() {
-        SpannableString s = new SpannableString(getString(R.string.task_type)+"");
+        SpannableString s = new SpannableString(getString(R.string.task_type) + "");
         return s;
+    }
+
+    private void pieChart() {
+
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList<>();
+        List<Task> tasks = taskViewModel.getAllTasksLive().getValue();
+        List<Label> labels = taskViewModel.getAllLabelsLive().getValue();
+        Log.d("test", "pieChart: 标签：" + labels.size());
+        Log.d("test", "pieChart: 任务：" + tasks.size());
+//        for (Label label : labels) {
+//            Log.d("test", "pieChart: 标签："+label.toString());
+//            int count = getLabelCount(tasks, label.getId());
+//            PieEntry pieEntry = new PieEntry(count, label.getName());
+//            entries.add(pieEntry);
+//            colors.add(label.getColor());
+//        }
+
+//        // 数据处理
+//        PieDataSet dataSet = new PieDataSet(entries, getString(R.string.task_type));
+//        dataSet.setSliceSpace(3f);
+//        dataSet.setIconsOffset(new MPPointF(0, 40));
+//        dataSet.setSelectionShift(5f);
+//        dataSet.setColors(colors);
+//
+//        PieData data = new PieData(dataSet);
+//        data.setValueFormatter(new PercentFormatter());
+//        data.setValueTextSize(11f);
+//        data.setValueTextColor(Color.WHITE);
+//        pieChart.setData(data);
+//        pieChart.highlightValues(null);
+//        pieChart.invalidate();
+
+    }
+
+    private int getLabelCount(List<Task> tasks, int labelId) {
+        int count = 0;
+        for (Task task : tasks) {
+            if (task.getLabelId() == labelId) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }

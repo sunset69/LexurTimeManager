@@ -16,6 +16,7 @@ import com.google.android.material.chip.Chip;
 import java.util.Calendar;
 import java.util.Date;
 
+import cc.lexur.lexurtimemanager.MainActivity;
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.ActivityAddTaskBinding;
