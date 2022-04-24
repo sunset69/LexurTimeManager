@@ -48,5 +48,6 @@
     <string name="other">other</string>
     <string name="legend">legend</string>
     <string name="task_status">task status</string>
+    <string name="task_label">task label</string>
 
 </resources>

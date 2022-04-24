@@ -72,7 +72,7 @@ public class SummaryFragment extends Fragment {
         taskViewModel = new ViewModelProvider(requireActivity(), new SavedStateViewModelFactory(getActivity().getApplication(), requireActivity())).get(TaskViewModel.class);
         allTasksLive = taskViewModel.getAllTasksLive();
         allLabelsLive = taskViewModel.getAllLabelsLive();
-        pieChart = binding.pieChart;
+        pieChart = binding.pieChartTaskLabel;
         return binding.getRoot();
     }
 
@@ -105,7 +105,8 @@ public class SummaryFragment extends Fragment {
         Log.d(TAG, "onResume: ===================================");
 
 
-        ChartUtils.pieChart(binding.pieChart, getString(R.string.task_status), getTaskStatusSummaryPiedata());
+        ChartUtils.pieChart(binding.pieChartTaskType, getString(R.string.task_status), getTaskStatusSummaryPiedata());
+        ChartUtils.pieChart(binding.pieChartTaskLabel, getString(R.string.task_label), getTaskLabelSummaryPiedata());
 
         /**
          * 任务标签饼状图
@@ -156,9 +157,10 @@ public class SummaryFragment extends Fragment {
      * 任务状态统计饼状图
      * 统计各种类型任务数w目
      * 4中状态
+     *
      * @return 返回饼状图数据
      */
-    public PieData getTaskStatusSummaryPiedata(){
+    public PieData getTaskStatusSummaryPiedata() {
         HashMap<Integer, Integer> taskStatusSummary = getTaskStatusSummary();
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(taskStatusSummary.get(TaskStatus.DOING), getContext().getString(R.string.doing)));
@@ -175,7 +177,7 @@ public class SummaryFragment extends Fragment {
         PieDataSet dataSet = new PieDataSet(entries, getString(R.string.legend));
         dataSet.setColors(colors);
         PieData pieData = new PieData(dataSet);
-        pieData.setDataSet(dataSet);
+//        pieData.setDataSet(dataSet);
         pieData.setValueFormatter(new PercentFormatter());
         pieData.setValueTextSize(11f);
         pieData.setValueTextColor(Color.BLACK);
@@ -188,10 +190,10 @@ public class SummaryFragment extends Fragment {
      *
      * @return 统计数据
      */
-    public HashMap<String, Integer> getTaskLabelSummary() {
+    public HashMap<Label, Integer> getTaskLabelSummary() {
 
         HashMap<Integer, Integer> data = new HashMap<>();
-        HashMap<String, Integer> result = new HashMap<>();
+        HashMap<Label, Integer> result = new HashMap<>();
 
         for (Task task : allTasks) {
             int labelId = task.getLabelId();
@@ -205,7 +207,7 @@ public class SummaryFragment extends Fragment {
 
         List<Label> labels = taskViewModel.getAllLabelsLive().getValue();
         for (Label label : labels) {
-            result.put(label.getName(), data.get(label.getId()));
+            result.put(label, data.get(label.getId()));
         }
 
         Log.d(TAG, "getTaskLabelSummary: result:" + result);
@@ -214,17 +216,27 @@ public class SummaryFragment extends Fragment {
 
     }
 
-    public PieData getTaskLabelSummaryPiedata(){
-       return null;
-    }
+    public PieData getTaskLabelSummaryPiedata() {
+        HashMap<Label, Integer> taskLabelSummary = getTaskLabelSummary();
+        List<PieEntry> entries = new ArrayList<>();
+        List<Integer> colors = new ArrayList<>();
+        for (Label label : taskLabelSummary.keySet()) {
+            Integer size = taskLabelSummary.get(label);
+            if (size == null) {
+                size = 0;
+            }
+            entries.add(new PieEntry(size, label.getName()));
+            colors.add(label.getColor());
+        }
 
+        PieDataSet dataSet = new PieDataSet(entries, getString(R.string.legend));
+        dataSet.setColors(colors);
 
-    private void pieChart() {
-
-    }
-
-    private void lineChart() {
-
+        PieData pieData = new PieData(dataSet);
+        pieData.setValueFormatter(new PercentFormatter());
+        pieData.setValueTextSize(11f);
+        pieData.setValueTextColor(Color.WHITE);
+        return pieData;
     }
 
 

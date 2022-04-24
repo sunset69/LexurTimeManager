@@ -6,6 +6,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 /**
  * 任务标签
  */
@@ -66,5 +68,18 @@ public class Label {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Label label = (Label) o;
+        return id == label.id && color == label.color && name.equals(label.name) && createTime.equals(label.createTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, createTime, color);
     }
 }
