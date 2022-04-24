@@ -105,34 +105,7 @@ public class SummaryFragment extends Fragment {
         Log.d(TAG, "onResume: ===================================");
 
 
-        /**
-         * 任务状态统计饼状图
-         * 统计各种类型任务数w目
-         * 4中状态
-         */
-        HashMap<Integer, Integer> taskStatusSummary = getTaskStatusSummary();
-        List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(taskStatusSummary.get(TaskStatus.DOING), getContext().getString(R.string.doing)));
-        entries.add(new PieEntry(taskStatusSummary.get(TaskStatus.DELAY), getString(R.string.delay)));
-        entries.add(new PieEntry(taskStatusSummary.get(TaskStatus.ABORT), getString(R.string.abort)));
-        entries.add(new PieEntry(taskStatusSummary.get(TaskStatus.FINISH), getString(R.string.finish)));
-
-        List<Integer> colors = new ArrayList<>();
-        colors.add(getContext().getColor(R.color.doing));
-        colors.add(getContext().getColor(R.color.delay));
-        colors.add(getContext().getColor(R.color.abort));
-        colors.add(getContext().getColor(R.color.finish));
-
-        PieDataSet dataSet = new PieDataSet(entries, getString(R.string.legend));
-        dataSet.setColors(colors);
-        PieData pieData = new PieData(dataSet);
-        pieData.setDataSet(dataSet);
-        pieData.setValueFormatter(new PercentFormatter());
-        pieData.setValueTextSize(11f);
-        pieData.setValueTextColor(Color.BLACK);
-
-        ChartUtils.pieChart(binding.pieChart, getString(R.string.task_status), pieData);
-
+        ChartUtils.pieChart(binding.pieChart, getString(R.string.task_status), getTaskStatusSummaryPiedata());
 
         /**
          * 任务标签饼状图
@@ -180,6 +153,37 @@ public class SummaryFragment extends Fragment {
     }
 
     /**
+     * 任务状态统计饼状图
+     * 统计各种类型任务数w目
+     * 4中状态
+     * @return 返回饼状图数据
+     */
+    public PieData getTaskStatusSummaryPiedata(){
+        HashMap<Integer, Integer> taskStatusSummary = getTaskStatusSummary();
+        List<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry(taskStatusSummary.get(TaskStatus.DOING), getContext().getString(R.string.doing)));
+        entries.add(new PieEntry(taskStatusSummary.get(TaskStatus.DELAY), getString(R.string.delay)));
+        entries.add(new PieEntry(taskStatusSummary.get(TaskStatus.ABORT), getString(R.string.abort)));
+        entries.add(new PieEntry(taskStatusSummary.get(TaskStatus.FINISH), getString(R.string.finish)));
+
+        List<Integer> colors = new ArrayList<>();
+        colors.add(getContext().getColor(R.color.doing));
+        colors.add(getContext().getColor(R.color.delay));
+        colors.add(getContext().getColor(R.color.abort));
+        colors.add(getContext().getColor(R.color.finish));
+
+        PieDataSet dataSet = new PieDataSet(entries, getString(R.string.legend));
+        dataSet.setColors(colors);
+        PieData pieData = new PieData(dataSet);
+        pieData.setDataSet(dataSet);
+        pieData.setValueFormatter(new PercentFormatter());
+        pieData.setValueTextSize(11f);
+        pieData.setValueTextColor(Color.BLACK);
+
+        return pieData;
+    }
+
+    /**
      * 获取分类相关统计数据
      *
      * @return 统计数据
@@ -208,6 +212,10 @@ public class SummaryFragment extends Fragment {
 
         return result;
 
+    }
+
+    public PieData getTaskLabelSummaryPiedata(){
+       return null;
     }
 
 
