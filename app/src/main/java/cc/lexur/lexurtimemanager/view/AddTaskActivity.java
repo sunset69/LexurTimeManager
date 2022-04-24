@@ -82,6 +82,7 @@ public class AddTaskActivity extends AppCompatActivity {
             for (int i = 0; i < labels.size(); i++) {
                 Label label = labels.get(i);
                 Chip chip = new Chip(this);
+                chip.setTag(label);
                 chip.setCheckable(true);
                 chip.setText(label.getName());
                 chip.setChipBackgroundColor(ChipUtils.setChipColor(label.getColor()));
@@ -118,6 +119,8 @@ public class AddTaskActivity extends AppCompatActivity {
                     selectedChip = (Chip) binding.cgLabel.getChildAt(i);
                 }
             }
+            Label label = (Label) selectedChip.getTag();
+
 
 
             /**
@@ -150,7 +153,7 @@ public class AddTaskActivity extends AppCompatActivity {
             task.setCreateTime(new Date());
             task.setStartTime(calendarStart.getTime());
             task.setStartTime(calendarStop.getTime());
-            task.setLabelId(selectedChip.getId());
+            task.setLabelId(label.getId());
 
             taskViewModel.insertTasks(task);
 

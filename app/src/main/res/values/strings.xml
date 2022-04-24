@@ -46,5 +46,7 @@
     <string name="select_stop_time">select stop time</string>
     <string name="archive">Archive</string>
     <string name="other">other</string>
+    <string name="legend">legend</string>
+    <string name="task_status">task status</string>
 
 </resources>
