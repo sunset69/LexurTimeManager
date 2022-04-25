@@ -79,7 +79,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/standard_margin"
-                        android:text="2022年3月30日23:39:46"
+                        android:text="@{task.getFormatStartTime()}"
                         android:textSize="@dimen/middle_text" />
 
                 </LinearLayout>
@@ -102,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/standard_margin"
-                        android:text="2022年3月30日23:39:46"
+                        android:text="@{task.getFormatStopTime()}"
                         android:textSize="@dimen/middle_text" />
 
                 </LinearLayout>

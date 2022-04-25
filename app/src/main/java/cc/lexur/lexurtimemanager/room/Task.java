@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 import java.util.Date;
 import java.util.jar.Attributes;
 
+import cc.lexur.lexurtimemanager.utils.DateFormat;
+
 @Entity
 public class Task {
 
@@ -48,6 +50,17 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    // 获取格式化时间
+    @Ignore
+    public String getFormatStartTime(){
+        return DateFormat.getAllTime(startTime);
+    }
+
+    @Ignore
+    public String getFormatStopTime(){
+        return DateFormat.getAllTime(stopTime);
     }
 
     @Override
