@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import cc.lexur.lexurtimemanager.R;
@@ -105,11 +106,24 @@ public class TaskFragment extends Fragment {
 
         //为实现LiveData的数据设置观察者，以便当数据改变时通知UI更新数据
         taskViewModel.getAllTasksLive().observe(requireActivity(), tasks -> {
+            // 检测是否为过时
+            ArrayList<Task> taskModify = new ArrayList<>();
             for (Task task : tasks) {
-                if (task.getStatus() == TaskStatus.DOING && task.getStopTime().before(Calendar.getInstance().getTime())) {
-                    task.setStatus(TaskStatus.DELAY);
-                    taskViewModel.updateTasks(task);
+                if (task.getStatus() == TaskStatus.DOING) {
+                    if (task.getStopTime().before(Calendar.getInstance().getTime())) {
+                        task.setStatus(TaskStatus.DELAY);
+//                        taskViewModel.updateTasks(task);
+                        taskModify.add(task);
+                    }
                 }
+            }
+            if (taskModify.size() != 0){
+                Task[] modify = new Task[taskModify.size()];
+                for (int i = 0; i < taskModify.size(); i++) {
+                    modify[i] = taskModify.get(i);
+                }
+                taskViewModel.updateTasks(modify);
+                Log.d("LexurTest", "onViewCreated: 修改。 。。");
             }
             recyclerAdapter.setAllWords(tasks);
             recyclerAdapter.notifyDataSetChanged();

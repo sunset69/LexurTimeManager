@@ -108,7 +108,7 @@ public class AddTaskActivity extends AppCompatActivity {
             String description = binding.etDescription.getText().toString();
             Calendar calendarStart;
             Calendar calendarStop;
-            calendarStart = (Calendar) binding.selectStopTime.getTag();
+            calendarStart = (Calendar) binding.selectStartTime.getTag();
             calendarStop = (Calendar) binding.selectStopTime.getTag();
 
             int selectId = binding.cgLabel.getCheckedChipId();
@@ -119,8 +119,6 @@ public class AddTaskActivity extends AppCompatActivity {
                     selectedChip = (Chip) binding.cgLabel.getChildAt(i);
                 }
             }
-            Label label = (Label) selectedChip.getTag();
-
 
 
             /**
@@ -143,16 +141,22 @@ public class AddTaskActivity extends AppCompatActivity {
                 return;
             }
 
+
             /**
              * 封装数据并提交
              */
 
+            String TAG = "LexurTest";
+            Log.d(TAG, "init: 开始时间："+ calendarStart.getTime());
+            Log.d(TAG, "init: 结束时间："+ calendarStop.getTime());
+
+            Label label = (Label) selectedChip.getTag();
             Task task = new Task();
             task.setName(title);
             task.setDescription(description);
             task.setCreateTime(new Date());
             task.setStartTime(calendarStart.getTime());
-            task.setStartTime(calendarStop.getTime());
+            task.setStopTime(calendarStop.getTime());
             task.setLabelId(label.getId());
 
             taskViewModel.insertTasks(task);
