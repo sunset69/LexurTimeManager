@@ -2,7 +2,6 @@ package cc.lexur.lexurtimemanager.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +23,6 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import cc.lexur.lexurtimemanager.R;
@@ -112,18 +109,16 @@ public class TaskFragment extends Fragment {
                 if (task.getStatus() == TaskStatus.DOING) {
                     if (task.getStopTime().before(Calendar.getInstance().getTime())) {
                         task.setStatus(TaskStatus.DELAY);
-//                        taskViewModel.updateTasks(task);
                         taskModify.add(task);
                     }
                 }
             }
-            if (taskModify.size() != 0){
+            if (taskModify.size() != 0) {
                 Task[] modify = new Task[taskModify.size()];
                 for (int i = 0; i < taskModify.size(); i++) {
                     modify[i] = taskModify.get(i);
                 }
                 taskViewModel.updateTasks(modify);
-                Log.d("LexurTest", "onViewCreated: 修改。 。。");
             }
             recyclerAdapter.setAllWords(tasks);
             recyclerAdapter.notifyDataSetChanged();
