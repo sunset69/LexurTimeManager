@@ -213,6 +213,7 @@ public class TaskFragment extends Fragment {
             holder.tvTaskDescription.setText(task.getDescription());
             holder.tvStatus.setText(status);
             holder.cardView.setBackgroundColor(color);
+            holder.checkBox.setChecked(task.getStatus() == TaskStatus.FINISH);
 
             // 点击事件,跳转至任务详情页面
             holder.cardView.setOnClickListener(view -> {

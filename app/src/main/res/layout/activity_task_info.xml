@@ -122,10 +122,11 @@
                         android:textSize="@dimen/small_text" />
 
                     <TextView
+                        android:id="@+id/taskStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/standard_margin"
-                        android:text="正在进行"
+                        android:text=""
                         android:textSize="@dimen/middle_text" />
                 </LinearLayout>
 

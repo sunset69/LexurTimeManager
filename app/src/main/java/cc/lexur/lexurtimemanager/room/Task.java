@@ -1,5 +1,7 @@
 package cc.lexur.lexurtimemanager.room;
 
+import android.content.Context;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -8,7 +10,9 @@ import androidx.room.PrimaryKey;
 import java.util.Date;
 import java.util.jar.Attributes;
 
+import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.utils.DateFormat;
+import cc.lexur.lexurtimemanager.utils.TaskStatus;
 
 @Entity
 public class Task {
@@ -62,6 +66,7 @@ public class Task {
     public String getFormatStopTime(){
         return DateFormat.getAllTime(stopTime);
     }
+
 
     @Override
     public String toString() {
