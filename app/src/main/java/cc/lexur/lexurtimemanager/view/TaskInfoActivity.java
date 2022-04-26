@@ -1,19 +1,19 @@
 package cc.lexur.lexurtimemanager.view;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
 import cc.lexur.lexurtimemanager.R;
 import cc.lexur.lexurtimemanager.TaskViewModel;
 import cc.lexur.lexurtimemanager.databinding.ActivityTaskInfoBinding;
 import cc.lexur.lexurtimemanager.room.Task;
+import cc.lexur.lexurtimemanager.utils.TaskStatus;
 
 /**
  * 任务详情界面
@@ -40,5 +40,21 @@ public class TaskInfoActivity extends AppCompatActivity {
         }
         binding.setTask(task);
         binding.setLifecycleOwner(this);
+        String status = "error";
+        switch (task.getStatus()) {
+            case TaskStatus.DOING:
+                status = getString(R.string.doing);
+                break;
+            case TaskStatus.DELAY:
+                status = getString(R.string.delay);
+                break;
+            case TaskStatus.ABORT:
+                status = getString(R.string.abort);
+                break;
+            case TaskStatus.FINISH:
+                status = getString(R.string.finish);
+                break;
+        }
+        binding.taskStatus.setText(status);
     }
 }
