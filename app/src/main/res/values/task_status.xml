@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="doing">#f9fbba</color>
-    <color name="delay">#d4edf4</color>
+    <color name="doing">#A1FF87</color>
+    <color name="delay">#FFDB5A</color>
     <color name="abort">#f6c2c2</color>
-    <color name="finish">#e2f2d5</color>
+    <color name="finish">#DDDDDD</color>
 
     <string name="doing">doing</string>
     <string name="delay">delay</string>
