@@ -69,6 +69,12 @@
                         android:layout_height="match_parent" />
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="发送通知" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

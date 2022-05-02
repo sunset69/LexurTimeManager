@@ -42,6 +42,7 @@ import cc.lexur.lexurtimemanager.room.Label;
 import cc.lexur.lexurtimemanager.room.Task;
 import cc.lexur.lexurtimemanager.utils.ChartUtils;
 import cc.lexur.lexurtimemanager.utils.TaskStatus;
+import cc.lexur.lexurtimemanager.utils.TimeTaskUtil;
 
 
 /**
@@ -85,6 +86,10 @@ public class SummaryFragment extends Fragment {
         });
         allLabelsLive.observe(this, labels -> {
             allLabels = labels;
+        });
+
+        binding.button.setOnClickListener(v->{
+            TimeTaskUtil.timeTask(v.getContext(),null);
         });
 
     }
