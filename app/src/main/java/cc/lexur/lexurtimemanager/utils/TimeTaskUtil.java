@@ -8,10 +8,10 @@ import android.content.Intent;
 import java.util.Calendar;
 
 public class TimeTaskUtil {
-    public static void timeTask(Context context, Calendar calendar1){
+    public static void timeTask(Context context, Calendar calendar1,int taskId){
         //操作：发送一个广播，广播接收后Toast提示定时操作完成
         Intent intent = new Intent(context, AlarmReceiver.class);
-        intent.setAction("short");
+        intent.setAction(String.valueOf(taskId));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         //设定一个五秒后的时间

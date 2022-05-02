@@ -9,10 +9,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         System.out.println("接收到通知！");
-        if (intent.getAction().equals("short")) {
-            Toast.makeText(context, "short alarm", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(context, "repeating alarm", Toast.LENGTH_LONG).show();
-        }
+        String action = intent.getAction();
+        NotificationUtil.notification(context,"任务到期","任务即将结束",action);
+
     }
 }

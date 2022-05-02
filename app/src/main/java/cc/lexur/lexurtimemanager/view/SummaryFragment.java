@@ -89,7 +89,7 @@ public class SummaryFragment extends Fragment {
         });
 
         binding.button.setOnClickListener(v->{
-            TimeTaskUtil.timeTask(v.getContext(),null);
+            TimeTaskUtil.timeTask(v.getContext(),null,1);
         });
 
     }
