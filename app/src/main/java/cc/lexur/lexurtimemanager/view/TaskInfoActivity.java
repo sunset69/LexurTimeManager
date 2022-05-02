@@ -2,6 +2,7 @@ package cc.lexur.lexurtimemanager.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,8 +32,15 @@ public class TaskInfoActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_task_info);
         taskViewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(getApplication(), this)).get(TaskViewModel.class);
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        int current_id = extras.getInt("CURRENT_ID");
+//        Bundle extras = intent.getExtras();
+//        int current_id = extras.getInt("CURRENT_ID");
+        String action = intent.getAction();
+        Log.d("LexurTest", "onCreate: 接收到action："+action);
+        if (action == null){
+            Toast.makeText(getApplicationContext(), "action为空！action:"+action, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        int current_id = Integer.valueOf(action) ;
         task = taskViewModel.getTaskById(current_id);
         if (task == null) {
             Toast.makeText(getApplicationContext(), "发生错误！", Toast.LENGTH_SHORT).show();

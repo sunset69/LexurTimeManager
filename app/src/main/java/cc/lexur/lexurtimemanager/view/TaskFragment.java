@@ -219,9 +219,10 @@ public class TaskFragment extends Fragment {
             holder.cardView.setOnClickListener(view -> {
                 Task clickedTask = (Task) view.getTag(R.string.ITEM_TASK_TAG);
                 Intent intent = new Intent(view.getContext(), TaskInfoActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("CURRENT_ID", clickedTask.getId());
-                intent.putExtras(bundle);
+//                Bundle bundle = new Bundle();
+//                bundle.putInt("CURRENT_ID", clickedTask.getId());
+//                intent.putExtras(bundle);
+                intent.setAction(String.valueOf(clickedTask.getId()));
                 view.getContext().startActivity(intent);
             });
 
