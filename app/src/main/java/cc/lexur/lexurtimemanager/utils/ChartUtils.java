@@ -1,39 +1,31 @@
 package cc.lexur.lexurtimemanager.utils;
 
-import android.app.PictureInPictureUiState;
 import android.graphics.Color;
-import android.graphics.Point;
 
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 public class ChartUtils {
 
-//    PieChart pieChart;
-//    LineChart lineChart;
-//
-//    public ChartUtils() {
-//    }
-//
-//    public ChartUtils(PieChart pieChart) {
-//        this.pieChart = pieChart;
-//    }
-//
-//    public ChartUtils(LineChart lineChart) {
-//        this.lineChart = lineChart;
-//    }
-
-    public static void pieChart(PieChart pieChart, String description,PieData data){
+    /**
+     * 显示饼状图
+     *
+     * @param pieChart    饼状图控件
+     * @param description 饼状图中间的描述
+     * @param data        数据
+     */
+    public static void pieChart(PieChart pieChart, String description, PieData data) {
 
         /**
          * 图标样式设计
@@ -105,5 +97,92 @@ public class ChartUtils {
         pieChart.invalidate();
     }
 
+    /**
+     * 折线图
+     * @param lineChart
+     * @param data
+     */
+    public static void lineChart(LineChart lineChart, LineData data) {
 
+    }
+
+    /**
+     * 条形图
+     * @param barChart
+     * @param data 折线图数据
+     */
+    public static void barChart(BarChart barChart, BarData data){
+
+        //设置样式
+        barChart.setDrawBarShadow(false);
+        barChart.setDrawValueAboveBar(true);
+        barChart.getDescription().setEnabled(true);
+        barChart.getDescription().setEnabled(false);
+        barChart.setMaxVisibleValueCount(60); //设置做多显示个数
+        barChart.setPinchZoom(false);
+        barChart.setDrawGridBackground(false);
+        barChart.getAxisRight().setEnabled(false);
+
+        //x轴样式
+        ValueFormatter xAxisFormatter = new MyValueFormatter(barChart);
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); // only intervals of 1 day
+        xAxis.setLabelCount(7);
+        xAxis.setValueFormatter(xAxisFormatter);//通过x轴数字转换为文字
+
+        //Y轴样式
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setSpaceTop(15f);
+        leftAxis.setAxisMinimum(0); // this replaces setStartAtZero(true)
+
+        //图例
+        Legend l = barChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(true);
+        l.setXEntrySpace(7f);
+        l.setYEntrySpace(0f);
+        l.setYOffset(0f);
+
+        //设置数据
+            barChart.setData(data);
+        }
+
+
+    static class MyValueFormatter extends ValueFormatter {
+
+        String[] taskStatus = new String[]{
+                "结束","延时","放弃","完成"
+        };
+        private final BarLineChartBase<?> chart;
+
+        public MyValueFormatter(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+        @Override
+        public String getAxisLabel(float value, AxisBase axis) {
+            String str = "";
+            switch ((int) value){
+                case 1:
+                    str = taskStatus[0];
+                    break;
+                case 2:
+                    str = taskStatus[1];
+                    break;
+                case 3:
+                    str = taskStatus[2];
+                    break;
+                case 4:
+                    str = taskStatus[3];
+                    break;
+            }
+
+            return str;
+        }
+    }
 }
