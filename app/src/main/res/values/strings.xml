@@ -27,9 +27,9 @@
     <string name="select_time">click and choose time</string>
     <string name="time">Time</string>
     <string name="date">Date</string>
-    <string name="description">Description:</string>
+    <string name="description">Description</string>
     <string name="label">Label</string>
-    <string name="label_input_hint">请输入标签并使用逗号隔开</string>
+    <string name="label_input_hint">Enter labels separated by “,”</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="number">number:</string>
