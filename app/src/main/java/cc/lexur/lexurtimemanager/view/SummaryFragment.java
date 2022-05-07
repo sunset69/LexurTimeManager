@@ -15,9 +15,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -47,13 +44,10 @@ public class SummaryFragment extends Fragment {
 
     FragmentSummaryBinding binding;
     TaskViewModel taskViewModel;
-    private PieChart pieChart;
-    private BarChart barChart;
-    private LineChart lineChart;
     private LiveData<List<Task>> allTasksLive;
     private LiveData<List<Label>> allLabelsLive;
-    private List<Task> allTasks;
-    private List<Label> allLabels;
+    private List<Task> allTasks = new ArrayList<>();
+    private List<Label> allLabels = new ArrayList<>();
 
     public SummaryFragment() {
     }
@@ -65,7 +59,6 @@ public class SummaryFragment extends Fragment {
         taskViewModel = new ViewModelProvider(requireActivity(), new SavedStateViewModelFactory(getActivity().getApplication(), requireActivity())).get(TaskViewModel.class);
         allTasksLive = taskViewModel.getAllTasksLive();
         allLabelsLive = taskViewModel.getAllLabelsLive();
-        pieChart = binding.pieChartTaskLabel;
         return binding.getRoot();
     }
 
@@ -80,8 +73,8 @@ public class SummaryFragment extends Fragment {
             allLabels = labels;
         });
 
-        binding.button.setOnClickListener(v->{
-            TimeTaskUtil.timeTask(v.getContext(),null,1);
+        binding.button.setOnClickListener(v -> {
+            TimeTaskUtil.timeTask(v.getContext(), null, 1);
         });
 
     }
@@ -174,7 +167,6 @@ public class SummaryFragment extends Fragment {
         PieDataSet dataSet = new PieDataSet(entries, getString(R.string.legend));
         dataSet.setColors(colors);
         PieData pieData = new PieData(dataSet);
-//        pieData.setDataSet(dataSet);
         pieData.setValueFormatter(new PercentFormatter());
         pieData.setValueTextSize(11f);
         pieData.setValueTextColor(Color.BLACK);
@@ -202,8 +194,7 @@ public class SummaryFragment extends Fragment {
 
         Log.d(TAG, "getTaskLabelSummary: task labels:" + data);
 
-        List<Label> labels = taskViewModel.getAllLabelsLive().getValue();
-        for (Label label : labels) {
+        for (Label label : allLabels) {
             result.put(label, data.get(label.getId()));
         }
 
