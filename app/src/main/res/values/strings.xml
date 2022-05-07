@@ -49,5 +49,6 @@
     <string name="legend">legend</string>
     <string name="task_status">task status</string>
     <string name="task_label">task label</string>
+    <string name="barchat_task_status">task status barchart</string>
 
 </resources>

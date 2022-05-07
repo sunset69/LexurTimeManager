@@ -9,16 +9,22 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.compose.ui.graphics.drawscope.Fill;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,8 +108,52 @@ public class SummaryFragment extends Fragment {
          * 任务标签饼状图
          * 统计每种类型任务数目
          */
+        ChartUtils.barChart(getContext(),binding.barChartTaskStatus, getTaskStatusSummaryBarData(binding.barChartTaskStatus));
 
+    }
 
+    private BarData getTaskStatusSummaryBarData(BarChart barChart) {
+        ArrayList<BarEntry> values = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList<>();
+
+        HashMap<Integer, Integer> taskStatusSummary = getTaskStatusSummary();
+        for (Integer key : taskStatusSummary.keySet()) {
+            values.add(new BarEntry(key, taskStatusSummary.get(key)));
+            switch (key) {
+                case TaskStatus.DOING:
+                    colors.add(getContext().getColor(R.color.doing));
+                    break;
+                case TaskStatus.DELAY:
+                    colors.add(getContext().getColor(R.color.delay));
+                    break;
+                case TaskStatus.ABORT:
+                    colors.add(getContext().getColor(R.color.abort));
+                    break;
+                case TaskStatus.FINISH:
+                    colors.add(getContext().getColor(R.color.finish));
+                    break;
+            }
+        }
+        BarDataSet set1;
+
+        if (barChart.getData() != null && barChart.getData().getDataSetCount() > 0){
+
+            set1 = (BarDataSet) barChart.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+            set1.setColors(colors);
+            barChart.notifyDataSetChanged();
+        }
+
+        set1 = new BarDataSet(values, getString(R.string.barchat_task_status));
+        set1.setDrawIcons(false);
+        ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1);
+        set1.setColors(colors);
+        BarData data = new BarData(dataSets);
+        data.setValueTextSize(10f);
+        data.setBarWidth(0.9f);
+
+        return data;
     }
 
     /**

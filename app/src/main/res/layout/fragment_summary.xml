@@ -33,6 +33,7 @@
                     android:id="@+id/llTaskType"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
+                    android:layout_marginTop="5dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -53,6 +54,7 @@
                     android:id="@+id/llTaskLabel"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
+                    android:layout_marginTop="5dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -65,6 +67,27 @@
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/pieChartTaskLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llTaskStatusBarChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/task_status"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/large_text" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChartTaskStatus"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </LinearLayout>

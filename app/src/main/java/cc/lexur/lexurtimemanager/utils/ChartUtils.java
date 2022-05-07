@@ -1,5 +1,6 @@
 package cc.lexur.lexurtimemanager.utils;
 
+import android.content.Context;
 import android.graphics.Color;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -15,6 +16,8 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+
+import cc.lexur.lexurtimemanager.R;
 
 public class ChartUtils {
 
@@ -111,7 +114,7 @@ public class ChartUtils {
      * @param barChart
      * @param data 折线图数据
      */
-    public static void barChart(BarChart barChart, BarData data){
+    public static void barChart(Context context,BarChart barChart, BarData data){
 
         //设置样式
         barChart.setDrawBarShadow(false);
@@ -124,7 +127,7 @@ public class ChartUtils {
         barChart.getAxisRight().setEnabled(false);
 
         //x轴样式
-        ValueFormatter xAxisFormatter = new MyValueFormatter(barChart);
+        ValueFormatter xAxisFormatter = new MyValueFormatter(context,barChart);
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
@@ -135,7 +138,7 @@ public class ChartUtils {
         //Y轴样式
         YAxis leftAxis = barChart.getAxisLeft();
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-        leftAxis.setSpaceTop(15f);
+        leftAxis.setSpaceTop(30f);
         leftAxis.setAxisMinimum(0); // this replaces setStartAtZero(true)
 
         //图例
@@ -150,17 +153,21 @@ public class ChartUtils {
 
         //设置数据
             barChart.setData(data);
+            barChart.notifyDataSetChanged();
         }
 
 
     static class MyValueFormatter extends ValueFormatter {
+
+        Context context;
 
         String[] taskStatus = new String[]{
                 "结束","延时","放弃","完成"
         };
         private final BarLineChartBase<?> chart;
 
-        public MyValueFormatter(BarLineChartBase<?> chart) {
+        public MyValueFormatter(Context context,BarLineChartBase<?> chart) {
+            this.context = context;
             this.chart = chart;
         }
 
@@ -168,17 +175,17 @@ public class ChartUtils {
         public String getAxisLabel(float value, AxisBase axis) {
             String str = "";
             switch ((int) value){
-                case 1:
-                    str = taskStatus[0];
+                case TaskStatus.DOING:
+                    str = context.getString(R.string.doing);
                     break;
-                case 2:
-                    str = taskStatus[1];
+                case TaskStatus.DELAY:
+                    str = context.getString(R.string.delay);
                     break;
-                case 3:
-                    str = taskStatus[2];
+                case TaskStatus.ABORT:
+                    str = context.getString(R.string.abort);
                     break;
-                case 4:
-                    str = taskStatus[3];
+                case TaskStatus.FINISH:
+                    str = context.getString(R.string.finish);
                     break;
             }
 
